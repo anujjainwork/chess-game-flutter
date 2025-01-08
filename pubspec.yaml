@@ -1,0 +1,37 @@
+name: chess
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite:
+  path:
+  flutter_svg:
+  bloc:
+  flutter_bloc:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/assets/bishop_black.svg
+    - lib/assets/bishop_white.svg
+    - lib/assets/king_black.svg
+    - lib/assets/king_white.svg
+    - lib/assets/knight_black.svg
+    - lib/assets/knight_white.svg
+    - lib/assets/pawn_black.svg
+    - lib/assets/pawn_white.svg
+    - lib/assets/queen_black.svg
+    - lib/assets/queen_white.svg
+    - lib/assets/rook_black.svg
+    - lib/assets/rook_white.svg
