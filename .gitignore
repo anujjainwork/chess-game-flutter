@@ -29,6 +29,7 @@ macos/build/
 macos/DerivedData/
 macos/.symlinks/
 
+
 # Linux build
 linux/Flutter/ephemeral/
 linux/build/

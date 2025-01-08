@@ -12,14 +12,17 @@ class BoardGameView extends StatelessWidget {
       create: (_) => BoardCubit()..initializeBoard(),
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(title: const Text('Chess Board')),
           body: BlocBuilder<BoardCubit, BoardState>(
             builder: (context, state) {
+              final cubit = context.read<BoardCubit>();
               if (state is BoardInitial) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (state is BoardLoaded) {
-                return getBoardGameWidget(state.board);
-              } else {
+              } else if (state is BoardLoaded || state is PieceSelected) {
+                return getBoardGameWidget(cubit.board, cubit, state);
+              } else if(state is InvalidMoveAttempted){
+                return getBoardGameWidget(cubit.board, cubit, state);
+              }
+              else{
                 return const Center(child: Text('Something went wrong!'));
               }
             },

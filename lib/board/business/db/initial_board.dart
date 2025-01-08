@@ -1,4 +1,5 @@
 import 'package:chess/board/data/model/cell_model.dart';
+import 'package:chess/board/data/model/piece_model.dart';
 
 List<BoardCellModel> generateInitialBoard() {
   List<String> initialSetup = [
@@ -13,10 +14,11 @@ List<BoardCellModel> generateInitialBoard() {
   ];
 
   return List.generate(64, (index) {
+    String pieceId = initialSetup[index];
     return BoardCellModel(
       cellPosition: index,
-      hasPiece: initialSetup[index].isNotEmpty,
-      pieceId: initialSetup[index],
+      hasPiece: pieceId.isNotEmpty,
+      pieceEntity: PieceModel.fromPieceId(pieceId),
     );
   });
 }
