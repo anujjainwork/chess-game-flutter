@@ -7,14 +7,14 @@ final class BoardInitial extends BoardState {}
 
 final class BoardLoaded extends BoardState {
   final List<BoardCellModel> board;
-  final String currentPlayer;
+  final PlayerType currentPlayer;
 
   BoardLoaded(this.board, this.currentPlayer);
 }
 
 final class PieceSelected extends BoardState {
   final int selectedCellIndex;
-  final String currentPlayer;
+  final PlayerType currentPlayer;
 
   PieceSelected(this.selectedCellIndex,this.currentPlayer);
 }

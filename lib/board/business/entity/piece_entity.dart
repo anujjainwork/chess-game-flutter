@@ -1,8 +1,11 @@
+import 'package:chess/board/business/enums/player_type_enum.dart';
+
 class PieceEntity {
   final String rank;
   final String player;
+  final PlayerType playerType;
 
-  PieceEntity({required this.rank, required this.player});
+  PieceEntity(this.playerType, {required this.rank, required this.player});
   // static PieceEntity? fromPieceId(String pieceId) {
   //   if (pieceId.isEmpty) return null;
 

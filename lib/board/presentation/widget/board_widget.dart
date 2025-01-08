@@ -1,3 +1,4 @@
+import 'package:chess/board/business/enums/player_type_enum.dart';
 import 'package:chess/board/data/model/cell_model.dart';
 import 'package:chess/board/presentation/cubit/board_cubit.dart';
 import 'package:chess/common/colors.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 Widget getBoardGameWidget(
     List<BoardCellModel> board, BoardCubit cubit, BoardState state) {
   int? selectedCellIndex;
-  String? currentPlayer;
+  PlayerType? currentPlayer;
 
   if (state is PieceSelected) {
     selectedCellIndex = state.selectedCellIndex;
@@ -49,10 +50,6 @@ Widget getBoardGameWidget(
                     : (isWhite
                         ? AppColors.lightCellColor
                         : AppColors.blackCellColor),
-                border: Border.all(
-                  color: isSelected ? Colors.yellow : Colors.transparent,
-                  width: isSelected ? 3.0 : 0.0,
-                ),
               ),
               child: board[index].hasPiece
                   ? Center(

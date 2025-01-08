@@ -1,4 +1,5 @@
 import 'package:chess/board/business/entity/piece_entity.dart';
+import 'package:chess/board/business/enums/player_type_enum.dart';
 
 class BoardCellEntity {
   int cellPosition;
