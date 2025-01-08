@@ -1,20 +1,21 @@
+import 'package:chess/board/business/entity/piece_entity.dart';
+
 class BoardCellEntity {
   int cellPosition;
   bool hasPiece;
-  String? pieceId;
+  PieceEntity? pieceEntity;
 
   BoardCellEntity({
     required this.cellPosition,
     required this.hasPiece,
-    this.pieceId,
+    this.pieceEntity,
   });
 
-  // Convert BoardCellEntity to Map for database storage
   Map<String, dynamic> toMap() {
     return {
       'cellPosition': cellPosition,
       'hasPiece': hasPiece ? 1 : 0,
-      'pieceId': pieceId,
+      'pieceEntity': pieceEntity,
     };
   }
 
@@ -23,7 +24,7 @@ class BoardCellEntity {
     return BoardCellEntity(
       cellPosition: map['cellPosition'],
       hasPiece: map['hasPiece'] == 1,
-      pieceId: map['pieceId'],
+      pieceEntity: map['pieceEntity'],
     );
   }
 }
