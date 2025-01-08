@@ -1,29 +1,33 @@
 import 'package:bloc/bloc.dart';
 import 'package:chess/board/business/db/initial_board.dart';
+import 'package:chess/board/business/enums/player_type_enum.dart';
 import 'package:chess/board/data/repository_impl/move_validation.dart';
+import 'package:chess/board/presentation/cubit/timer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:chess/board/data/model/cell_model.dart';
 
 part 'board_state.dart';
 
 class BoardCubit extends Cubit<BoardState> {
-  BoardCubit() : super(BoardInitial());
+  final TimerCubit timerCubit;
+  BoardCubit({required this.timerCubit}) : super(BoardInitial());
 
   List<BoardCellModel> _board = [];
-  String _currentPlayer = 'white'; // Track the current player (white or black)
+  PlayerType _currentPlayer = PlayerType.white;
 
   void initializeBoard() {
     _board = generateInitialBoard();
     emit(BoardLoaded(_board, _currentPlayer));
+    timerCubit.startTimer(_currentPlayer);  // Start the timer for the initial player
   }
 
   List<BoardCellModel> get board => _board;
-  String get currentPlayer => _currentPlayer;
+  PlayerType get currentPlayer => _currentPlayer;
 
   void selectPiece(int cellIndex) {
     final selectedCell = _board[cellIndex];
     if (selectedCell.hasPiece &&
-        selectedCell.pieceEntity!.player == _currentPlayer) {
+        selectedCell.pieceEntity!.playerType == _currentPlayer) {
       emit(PieceSelected(cellIndex, _currentPlayer));
     }
   }
@@ -32,12 +36,11 @@ class BoardCubit extends Cubit<BoardState> {
     final movingPiece = _board[fromIndex];
     final targetCell = _board[toIndex];
 
-    // Check if the move is valid (based on turn and if the target cell is empty or has an opposing piece)
     if (!movingPiece.hasPiece ||
-        movingPiece.pieceEntity!.player != _currentPlayer) return;
+        movingPiece.pieceEntity!.playerType != _currentPlayer) return;
 
     if (targetCell.hasPiece &&
-        targetCell.pieceEntity!.player == _currentPlayer) {
+        targetCell.pieceEntity!.playerType == _currentPlayer) {
       return;
     }
 
@@ -60,9 +63,12 @@ class BoardCubit extends Cubit<BoardState> {
         hasPiece: false,
         pieceEntity: null,
       );
-      _currentPlayer = _currentPlayer == 'white' ? 'black' : 'white';
+      _currentPlayer = _currentPlayer == PlayerType.white ? PlayerType.black : PlayerType.white;
       emit(PieceMoved(fromIndex, toIndex));
       emit(BoardLoaded(_board, _currentPlayer));
+
+      // Start the timer for the next player
+      timerCubit.startTimer(_currentPlayer);
     } else {
       emit(InvalidMoveAttempted('move not valid'));
     }
