@@ -1,10 +1,8 @@
-import 'package:chess/board/presentation/cubit/board_cubit.dart';
+import 'package:chess/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/board/presentation/cubit/timer_cubit.dart';
 import 'package:chess/board/presentation/widget/board_widget.dart';
 import 'package:chess/board/presentation/widget/timer_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BoardGameView extends StatelessWidget {
@@ -17,11 +15,10 @@ class BoardGameView extends StatelessWidget {
         BlocProvider<TimerCubit>(
           create: (_) => TimerCubit(),
         ),
-        BlocProvider<BoardCubit>(
-          create: (context) =>
-              BoardCubit(timerCubit: context.read<TimerCubit>())
-                ..initializeBoard(),
-        ),
+        BlocProvider<BoardLogicBloc>(
+            create: (context) =>
+                BoardLogicBloc(timerCubit: context.read<TimerCubit>())
+                  ..add(InitializeBoard())),
       ],
       child: SafeArea(
         child: Scaffold(
@@ -31,22 +28,23 @@ class BoardGameView extends StatelessWidget {
             children: [
               getTimerWidget(false),
               // Chessboard
-              Center(
-                child: BlocBuilder<BoardCubit, BoardState>(
-                  builder: (context, state) {
-                    final cubit = context.read<BoardCubit>();
-                    if (state is BoardInitial) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is BoardLoaded || state is PieceSelected) {
-                      return getBoardGameWidget(cubit.board, cubit, state);
-                    } else if (state is InvalidMoveAttempted) {
-                      return getBoardGameWidget(cubit.board, cubit, state);
-                    } else {
-                      return const Center(child: Text('Something went wrong!'));
-                    }
-                  },
-                ),
-              ),
+              Center(child: BlocBuilder<BoardLogicBloc, BoardLogicState>(
+                builder: (context, state) {
+                  final bloc = context.read<BoardLogicBloc>();
+                  if (state is BoardLogicInitial) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is BoardLoaded ||
+                      state is PieceSelected ||
+                      state is PieceDeselected) {
+                    // Ensure the board is always displayed
+                    return getBoardGameWidget(bloc.board, bloc, state);
+                  } else if (state is InvalidMoveAttempted) {
+                    return getBoardGameWidget(bloc.board, bloc, state);
+                  } else {
+                    return const Center(child: Text('Something went wrong!'));
+                  }
+                },
+              )),
               getTimerWidget(true),
             ],
           ),

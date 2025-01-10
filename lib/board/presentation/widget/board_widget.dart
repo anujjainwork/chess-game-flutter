@@ -1,12 +1,12 @@
 import 'package:chess/board/business/enums/player_type_enum.dart';
 import 'package:chess/board/data/model/cell_model.dart';
-import 'package:chess/board/presentation/cubit/board_cubit.dart';
+import 'package:chess/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/common/colors.dart';
 import 'package:chess/pieces/map_piece_icons.dart';
 import 'package:flutter/material.dart';
 
 Widget getBoardGameWidget(
-    List<BoardCellModel> board, BoardCubit cubit, BoardState state) {
+    List<BoardCellModel> board, BoardLogicBloc bloc, BoardLogicState state) {
   int? selectedCellIndex;
   PlayerType? currentPlayer;
 
@@ -34,13 +34,14 @@ Widget getBoardGameWidget(
             onTap: () {
               if (selectedCellIndex == null) {
                 // Select a piece
-                cubit.selectPiece(index);
+                bloc.add(SelectPiece(index));
               } else if (selectedCellIndex == index) {
                 // Deselect the piece
-                cubit.emit(BoardLoaded(board,currentPlayer!));
+                bloc.add(DeselectPiece());
               } else {
-                // Attempt to move the piece
-                cubit.movePiece(selectedCellIndex!, index);
+                // Attempt to move xthe piece
+                // cubit.movePiece(selectedCellIndex!, index);
+                  bloc.add(MovePiece(selectedCellIndex, index));
               }
             },
             child: Container(
