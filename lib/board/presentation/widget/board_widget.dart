@@ -6,11 +6,21 @@ import 'package:chess/pieces/map_piece_icons.dart';
 import 'package:flutter/material.dart';
 
 Widget getBoardGameWidget(
-    List<BoardCellModel> board, BoardLogicBloc bloc, BoardLogicState state) {
+    List<BoardCellModel> initialBoard, BoardLogicBloc bloc, BoardLogicState state) {
+  List<BoardCellModel> board = initialBoard; 
   int? selectedCellIndex;
   PlayerType? currentPlayer;
-
-  if (state is PieceSelected) {
+  List<int>? validMoves;
+  
+  if (state is BoardLoaded) {
+    board = state.board;
+    currentPlayer = state.currentPlayer;
+  } else if (state is ValidMovesHighlighted) {
+    board = state.board; // Always use the latest board state
+    selectedCellIndex = state.selectedCellIndex;
+    validMoves = state.validMoves;
+  } else if (state is PieceSelected) {
+    board = state.board;
     selectedCellIndex = state.selectedCellIndex;
     currentPlayer = state.currentPlayer;
   }
@@ -27,30 +37,28 @@ Widget getBoardGameWidget(
         itemBuilder: (context, index) {
           bool isWhite = (index ~/ 8 + index % 8) % 2 == 0;
 
-          // Highlight selected cell
           final isSelected = selectedCellIndex == index;
+          final isValidMove = validMoves?.contains(index) ?? false;
 
           return GestureDetector(
             onTap: () {
               if (selectedCellIndex == null) {
-                // Select a piece
                 bloc.add(SelectPiece(index));
               } else if (selectedCellIndex == index) {
-                // Deselect the piece
                 bloc.add(DeselectPiece());
               } else {
-                // Attempt to move xthe piece
-                // cubit.movePiece(selectedCellIndex!, index);
-                  bloc.add(MovePiece(selectedCellIndex, index));
+                bloc.add(MovePiece(selectedCellIndex, index));
               }
             },
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? Colors.blueAccent // Highlight selected cell
-                    : (isWhite
-                        ? AppColors.lightCellColor
-                        : AppColors.blackCellColor),
+                    ? Colors.blueAccent
+                    : isValidMove
+                        ? Colors.greenAccent
+                        : (isWhite
+                            ? AppColors.lightCellColor
+                            : AppColors.blackCellColor),
               ),
               child: board[index].hasPiece
                   ? Center(

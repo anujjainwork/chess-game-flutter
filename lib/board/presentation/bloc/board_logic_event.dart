@@ -28,3 +28,8 @@ class MovePiece extends BoardLogicEvent {
   @override
   List<Object?> get props => [fromIndex, toIndex];
 }
+
+class PlayerIsInCheck extends BoardLogicEvent {
+  final PlayerType playerType;
+  PlayerIsInCheck(this.playerType);
+}

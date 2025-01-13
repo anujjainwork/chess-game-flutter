@@ -35,7 +35,8 @@ class BoardGameView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is BoardLoaded ||
                       state is PieceSelected ||
-                      state is PieceDeselected) {
+                      state is PieceDeselected ||
+                      state is ValidMovesHighlighted) {
                     // Ensure the board is always displayed
                     return getBoardGameWidget(bloc.board, bloc, state);
                   } else if (state is InvalidMoveAttempted) {

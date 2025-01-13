@@ -18,8 +18,9 @@ final class BoardLoaded extends BoardLogicState {
 final class PieceSelected extends BoardLogicState {
   final int selectedCellIndex;
   final PlayerType currentPlayer;
+  final List<BoardCellModel> board;
 
-  PieceSelected(this.selectedCellIndex, this.currentPlayer);
+  PieceSelected(this.selectedCellIndex, this.currentPlayer, this.board);
 }
 
 final class PieceDeselected extends BoardLogicState{
@@ -31,6 +32,22 @@ final class PieceMoved extends BoardLogicState {
 
   PieceMoved(this.fromIndex, this.toIndex);
 }
+final class IsCheckState extends BoardLogicState{
+  final PlayerType currentPlayer;
+  IsCheckState(this.currentPlayer);
+}
+
+class ValidMovesHighlighted extends BoardLogicState {
+  final int selectedCellIndex;
+  final List<int> validMoves;
+  final List<BoardCellModel> board;
+
+  ValidMovesHighlighted(this.selectedCellIndex, this.validMoves, this.board);
+
+  @override
+  List<Object> get props => [selectedCellIndex, validMoves, board];
+}
+
 
 final class InvalidMoveAttempted extends BoardLogicState {
   final String reason;
