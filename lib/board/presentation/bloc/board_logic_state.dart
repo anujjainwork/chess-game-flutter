@@ -1,0 +1,59 @@
+part of 'board_logic_bloc.dart';
+
+sealed class BoardLogicState extends Equatable {
+  const BoardLogicState();
+  
+  @override
+  List<Object> get props => [];
+}
+final class BoardLogicInitial extends BoardLogicState {}
+
+final class BoardLoaded extends BoardLogicState {
+  final List<BoardCellModel> board;
+  final PlayerType currentPlayer;
+
+  BoardLoaded(this.board, this.currentPlayer);
+}
+
+final class PieceSelected extends BoardLogicState {
+  final int selectedCellIndex;
+  final PlayerType currentPlayer;
+  final List<BoardCellModel> board;
+
+  PieceSelected(this.selectedCellIndex, this.currentPlayer, this.board);
+}
+
+final class PieceDeselected extends BoardLogicState{
+}
+
+final class PieceMoved extends BoardLogicState {
+  final int fromIndex;
+  final int toIndex;
+
+  PieceMoved(this.fromIndex, this.toIndex);
+}
+final class IsCheckState extends BoardLogicState{
+  final PlayerType currentPlayer;
+  // final List<int> attackingPieceIndices;
+  final List<BoardCellModel> board;
+  IsCheckState(this.currentPlayer, this.board,);
+}
+
+class ValidMovesHighlighted extends BoardLogicState {
+  final int selectedCellIndex;
+  final List<int> validMoves;
+  final List<BoardCellModel> board;
+  final bool isInCheck;
+
+  ValidMovesHighlighted(this.selectedCellIndex, this.validMoves, this.board, this.isInCheck);
+
+  @override
+  List<Object> get props => [selectedCellIndex, validMoves, board];
+}
+
+
+final class InvalidMoveAttempted extends BoardLogicState {
+  final String reason;
+
+  InvalidMoveAttempted(this.reason);
+}

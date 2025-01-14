@@ -12,6 +12,8 @@ bool isValidMove({
   int toRow = toIndex ~/ 8;
   int toCol = toIndex % 8;
 
+  if(board[toIndex].hasPiece && board[toIndex].pieceEntity!.player == player) return false;
+
   if (rank == 'pawn') {
     return _validatePawnMove(fromRow, fromCol, toRow, toCol, player, board);
   } else if (rank == 'rook') {

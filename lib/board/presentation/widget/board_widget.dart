@@ -1,17 +1,32 @@
 import 'package:chess/board/business/enums/player_type_enum.dart';
 import 'package:chess/board/data/model/cell_model.dart';
-import 'package:chess/board/presentation/cubit/board_cubit.dart';
+import 'package:chess/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/common/colors.dart';
 import 'package:chess/pieces/map_piece_icons.dart';
 import 'package:flutter/material.dart';
 
 Widget getBoardGameWidget(
-    List<BoardCellModel> board, BoardCubit cubit, BoardState state) {
+    List<BoardCellModel> initialBoard, BoardLogicBloc bloc, BoardLogicState state) {
+  List<BoardCellModel> board = initialBoard; 
   int? selectedCellIndex;
   PlayerType? currentPlayer;
-
-  if (state is PieceSelected) {
+  List<int>? validMoves;
+  List<int>? attackingPiecesIndices;
+  
+  if (state is BoardLoaded) {
+    board = state.board;
+    currentPlayer = state.currentPlayer;
+  } else if (state is ValidMovesHighlighted) {
+    board = state.board; // Always use the latest board state
     selectedCellIndex = state.selectedCellIndex;
+    validMoves = state.validMoves;
+  } else if (state is PieceSelected) {
+    board = state.board;
+    selectedCellIndex = state.selectedCellIndex;
+    currentPlayer = state.currentPlayer;
+  }
+  else if(state is IsCheckState){
+    board = state.board;
     currentPlayer = state.currentPlayer;
   }
 
@@ -27,29 +42,28 @@ Widget getBoardGameWidget(
         itemBuilder: (context, index) {
           bool isWhite = (index ~/ 8 + index % 8) % 2 == 0;
 
-          // Highlight selected cell
           final isSelected = selectedCellIndex == index;
+          final isValidMove = validMoves?.contains(index) ?? false;
 
           return GestureDetector(
             onTap: () {
               if (selectedCellIndex == null) {
-                // Select a piece
-                cubit.selectPiece(index);
+                bloc.add(SelectPiece(index,attackingPiecesIndices));
               } else if (selectedCellIndex == index) {
-                // Deselect the piece
-                cubit.emit(BoardLoaded(board,currentPlayer!));
+                bloc.add(DeselectPiece());
               } else {
-                // Attempt to move the piece
-                cubit.movePiece(selectedCellIndex!, index);
+                bloc.add(MovePiece(selectedCellIndex, index));
               }
             },
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? Colors.blueAccent // Highlight selected cell
-                    : (isWhite
-                        ? AppColors.lightCellColor
-                        : AppColors.blackCellColor),
+                    ? Colors.blueAccent
+                    : isValidMove
+                        ? Colors.green[100]
+                        : (isWhite
+                            ? AppColors.lightCellColor
+                            : AppColors.blackCellColor),
               ),
               child: board[index].hasPiece
                   ? Center(
