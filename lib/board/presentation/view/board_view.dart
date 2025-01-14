@@ -1,7 +1,9 @@
 import 'package:chess/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/board/presentation/cubit/timer_cubit.dart';
 import 'package:chess/board/presentation/widget/board_widget.dart';
+import 'package:chess/board/presentation/widget/captured_piece_widget.dart';
 import 'package:chess/board/presentation/widget/timer_widget.dart';
+import 'package:chess/common/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +28,6 @@ class BoardGameView extends StatelessWidget {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              getTimerWidget(false),
               // Chessboard
               Center(child: BlocBuilder<BoardLogicBloc, BoardLogicState>(
                 builder: (context, state) {
@@ -39,7 +40,33 @@ class BoardGameView extends StatelessWidget {
                       state is ValidMovesHighlighted ||
                       state is IsCheckState) {
                     // Ensure the board is always displayed
-                    return getBoardGameWidget(bloc.board, bloc, state);
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            getCapturedPiecesWidget(
+                                bloc.capturedPiecesBlack, context),
+                            getTimerWidget(false),
+                          ],
+                        ),
+                        SizedBox(
+                          height: getDynamicHeight(context, 2),
+                        ),
+                        getBoardGameWidget(bloc.board, bloc, state),
+                        SizedBox(
+                          height: getDynamicHeight(context, 2),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            getCapturedPiecesWidget(
+                                bloc.capturedPiecesWhite, context),
+                            getTimerWidget(true),
+                          ],
+                        ),
+                      ],
+                    );
                   } else if (state is InvalidMoveAttempted) {
                     return getBoardGameWidget(bloc.board, bloc, state);
                   } else {
@@ -47,7 +74,6 @@ class BoardGameView extends StatelessWidget {
                   }
                 },
               )),
-              getTimerWidget(true),
             ],
           ),
         ),

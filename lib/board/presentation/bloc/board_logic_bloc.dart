@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:chess/board/business/db/initial_board.dart';
+import 'package:chess/board/business/entity/piece_entity.dart';
 import 'package:chess/board/business/enums/player_type_enum.dart';
 import 'package:chess/board/data/model/cell_model.dart';
 import 'package:chess/board/data/repository_impl/move_validation.dart';
@@ -16,6 +17,8 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   int whiteKingIndex = 60;
   int blackKingIndex = 4;
   PlayerType _currentPlayer = PlayerType.white;
+  List<PieceEntity> _capturedPiecesWhite = [];
+  List<PieceEntity> _capturedPiecesBlack = [];
 
   BoardLogicBloc({required this.timerCubit}) : super(BoardLogicInitial()) {
     on<InitializeBoard>(_onInitializeBoard);
@@ -25,6 +28,9 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   }
 
   List<BoardCellModel> get board => _board;
+
+  List<PieceEntity> get capturedPiecesBlack => _capturedPiecesBlack;
+  List<PieceEntity> get capturedPiecesWhite => _capturedPiecesWhite;
 
   @override
   void onTransition(
@@ -37,7 +43,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   void _onInitializeBoard(
       InitializeBoard event, Emitter<BoardLogicState> emit) {
     _board = generateInitialBoard();
-    emit(BoardLoaded(_board, _currentPlayer));
+    emit(BoardLoaded(_board, _currentPlayer,_capturedPiecesWhite,_capturedPiecesBlack));
     timerCubit
         .startTimer(_currentPlayer); // Start the timer for the initial player
   }
@@ -95,10 +101,10 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       if (validMovesState.isInCheck) {
         emit(IsCheckState(_currentPlayer, _board));
       } else {
-        emit(BoardLoaded(_board, _currentPlayer));
+        emit(BoardLoaded(_board, _currentPlayer,_capturedPiecesWhite,_capturedPiecesBlack));
       }
     } else {
-      emit(BoardLoaded(_board, _currentPlayer));
+      emit(BoardLoaded(_board, _currentPlayer,_capturedPiecesWhite,_capturedPiecesBlack));
     }
   }
 
@@ -121,6 +127,11 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     );
 
     if (isValid) {
+      if (_board[event.toIndex].hasPiece) {
+        _currentPlayer == PlayerType.white
+            ? _capturedPiecesWhite.add(_board[event.toIndex].pieceEntity!)
+            : _capturedPiecesBlack.add(_board[event.toIndex].pieceEntity!);
+      }
       // Move the piece and update the board
       _board[event.toIndex] = BoardCellModel(
         cellPosition: event.toIndex,
@@ -145,7 +156,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         _currentPlayer = _switchPlayer(_currentPlayer);
 
         emit(PieceMoved(event.fromIndex, event.toIndex));
-        emit(BoardLoaded(_board, _currentPlayer));
+        emit(BoardLoaded(_board, _currentPlayer,_capturedPiecesWhite,_capturedPiecesBlack));
       }
       // Start the timer for the next player
       timerCubit.startTimer(_currentPlayer);
