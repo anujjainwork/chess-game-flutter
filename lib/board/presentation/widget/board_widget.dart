@@ -11,6 +11,7 @@ Widget getBoardGameWidget(
   int? selectedCellIndex;
   PlayerType? currentPlayer;
   List<int>? validMoves;
+  List<int>? attackingPiecesIndices;
   
   if (state is BoardLoaded) {
     board = state.board;
@@ -22,6 +23,10 @@ Widget getBoardGameWidget(
   } else if (state is PieceSelected) {
     board = state.board;
     selectedCellIndex = state.selectedCellIndex;
+    currentPlayer = state.currentPlayer;
+  }
+  else if(state is IsCheckState){
+    board = state.board;
     currentPlayer = state.currentPlayer;
   }
 
@@ -43,7 +48,7 @@ Widget getBoardGameWidget(
           return GestureDetector(
             onTap: () {
               if (selectedCellIndex == null) {
-                bloc.add(SelectPiece(index));
+                bloc.add(SelectPiece(index,attackingPiecesIndices));
               } else if (selectedCellIndex == index) {
                 bloc.add(DeselectPiece());
               } else {
@@ -55,7 +60,7 @@ Widget getBoardGameWidget(
                 color: isSelected
                     ? Colors.blueAccent
                     : isValidMove
-                        ? Colors.greenAccent
+                        ? Colors.green[100]
                         : (isWhite
                             ? AppColors.lightCellColor
                             : AppColors.blackCellColor),

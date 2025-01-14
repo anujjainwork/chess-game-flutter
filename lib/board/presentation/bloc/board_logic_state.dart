@@ -34,15 +34,18 @@ final class PieceMoved extends BoardLogicState {
 }
 final class IsCheckState extends BoardLogicState{
   final PlayerType currentPlayer;
-  IsCheckState(this.currentPlayer);
+  // final List<int> attackingPieceIndices;
+  final List<BoardCellModel> board;
+  IsCheckState(this.currentPlayer, this.board,);
 }
 
 class ValidMovesHighlighted extends BoardLogicState {
   final int selectedCellIndex;
   final List<int> validMoves;
   final List<BoardCellModel> board;
+  final bool isInCheck;
 
-  ValidMovesHighlighted(this.selectedCellIndex, this.validMoves, this.board);
+  ValidMovesHighlighted(this.selectedCellIndex, this.validMoves, this.board, this.isInCheck);
 
   @override
   List<Object> get props => [selectedCellIndex, validMoves, board];

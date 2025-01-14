@@ -10,8 +10,9 @@ class InitializeBoard extends BoardLogicEvent {}
 
 class SelectPiece extends BoardLogicEvent {
   final int cellIndex;
+  final List<int>? attackingPiecesIndices;
 
-  SelectPiece(this.cellIndex);
+  SelectPiece(this.cellIndex, this.attackingPiecesIndices);
 
   @override
   List<Object?> get props => [cellIndex];

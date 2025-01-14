@@ -36,7 +36,8 @@ class BoardGameView extends StatelessWidget {
                   } else if (state is BoardLoaded ||
                       state is PieceSelected ||
                       state is PieceDeselected ||
-                      state is ValidMovesHighlighted) {
+                      state is ValidMovesHighlighted ||
+                      state is IsCheckState) {
                     // Ensure the board is always displayed
                     return getBoardGameWidget(bloc.board, bloc, state);
                   } else if (state is InvalidMoveAttempted) {
