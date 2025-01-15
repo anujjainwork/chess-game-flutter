@@ -5,6 +5,8 @@ sealed class BoardLogicState extends Equatable {
   
   @override
   List<Object> get props => [];
+
+  get isInCheck => null;
 }
 final class BoardLogicInitial extends BoardLogicState {}
 
@@ -56,6 +58,7 @@ class ValidMovesHighlighted extends BoardLogicState {
 
 final class InvalidMoveAttempted extends BoardLogicState {
   final String reason;
+  final bool isInCheck;
 
-  InvalidMoveAttempted(this.reason);
+  InvalidMoveAttempted(this.reason, this.isInCheck);
 }
