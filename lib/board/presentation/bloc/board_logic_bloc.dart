@@ -31,7 +31,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     Transition<BoardLogicEvent, BoardLogicState> transition,
   ) {
     super.onTransition(transition);
-    print('State Transition to:  ${transition.nextState}');
+    // print('State Transition to:  ${transition.nextState}');
   }
 
   void _onInitializeBoard(
@@ -47,8 +47,10 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
     if (selectedCell.hasPiece &&
         selectedCell.pieceEntity!.playerType == _currentPlayer) {
+      
+      final stillCheckAfterInvalidMove = state is InvalidMoveAttempted?state.isInCheck?true:false:false;
       // Determine if the current state is IsCheckState
-      final isInCheck = state is IsCheckState;
+      final isInCheck = (state is IsCheckState || stillCheckAfterInvalidMove);
 
       // Calculate valid moves based on the check state
       final validMoves = _board
@@ -102,57 +104,70 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     }
   }
 
-  void _onMovePiece(MovePiece event, Emitter<BoardLogicState> emit) {
-    final movingPiece = _board[event.fromIndex];
-    final targetCell = _board[event.toIndex];
+ void _onMovePiece(MovePiece event, Emitter<BoardLogicState> emit) {
+  final movingPiece = _board[event.fromIndex];
+  final targetCell = _board[event.toIndex];
 
-    if (!movingPiece.hasPiece ||
-        movingPiece.pieceEntity!.playerType != _currentPlayer) return;
+  if (!movingPiece.hasPiece ||
+      movingPiece.pieceEntity!.playerType != _currentPlayer) return;
 
-    if (targetCell.hasPiece &&
-        targetCell.pieceEntity!.playerType == _currentPlayer) return;
+  if (targetCell.hasPiece &&
+      targetCell.pieceEntity!.playerType == _currentPlayer) return;
 
-    final isValid = isValidMove(
-      rank: movingPiece.pieceEntity!.rank,
-      player: movingPiece.pieceEntity!.player,
-      fromIndex: event.fromIndex,
-      toIndex: event.toIndex,
-      board: _board,
+  final isInCheck = state is ValidMovesHighlighted
+      ? (state as ValidMovesHighlighted).isInCheck ?? false
+      : false;
+
+  final isValid = isInCheck
+      ? _doesMoveResolveCheck(
+          event.fromIndex,
+          event.toIndex,
+          _currentPlayer,
+          movingPiece.pieceEntity!.rank,
+          movingPiece.pieceEntity!.player,
+        )
+      : isValidMove(
+          rank: movingPiece.pieceEntity!.rank,
+          player: movingPiece.pieceEntity!.player,
+          fromIndex: event.fromIndex,
+          toIndex: event.toIndex,
+          board: _board,
+        );
+
+  if (isValid) {
+    // Perform the move
+    _board[event.toIndex] = BoardCellModel(
+      cellPosition: event.toIndex,
+      hasPiece: true,
+      pieceEntity: movingPiece.pieceEntity,
     );
 
-    if (isValid) {
-      // Move the piece and update the board
-      _board[event.toIndex] = BoardCellModel(
-        cellPosition: event.toIndex,
-        hasPiece: true,
-        pieceEntity: movingPiece.pieceEntity,
-      );
+    _board[event.fromIndex] = BoardCellModel(
+      cellPosition: event.fromIndex,
+      hasPiece: false,
+      pieceEntity: null,
+    );
 
-      _board[event.fromIndex] = BoardCellModel(
-        cellPosition: event.fromIndex,
-        hasPiece: false,
-        pieceEntity: null,
-      );
+    // Update the king's index if necessary
+    _updateKingIndex(movingPiece, event.toIndex);
 
-      _updateKingIndex(movingPiece, event.toIndex);
-
-      // Check if the move places the opponent in check
-      if (_isKingInCheck(_currentPlayer)) {
-        _currentPlayer = _switchPlayer(_currentPlayer);
-        emit(IsCheckState(_currentPlayer, board));
-        // print('Player is in check! Valid moves to resolve check: $validMoves');
-      } else {
-        _currentPlayer = _switchPlayer(_currentPlayer);
-
-        emit(PieceMoved(event.fromIndex, event.toIndex));
-        emit(BoardLoaded(_board, _currentPlayer));
-      }
-      // Start the timer for the next player
-      timerCubit.startTimer(_currentPlayer);
+    // Check if the move places the opponent in check
+    if (_isKingInCheck(_currentPlayer)) {
+      _currentPlayer = _switchPlayer(_currentPlayer);
+      emit(IsCheckState(_currentPlayer, _board));
     } else {
-      emit(InvalidMoveAttempted('Move not valid'));
+      _currentPlayer = _switchPlayer(_currentPlayer);
+      emit(PieceMoved(event.fromIndex, event.toIndex));
+      emit(BoardLoaded(_board, _currentPlayer));
     }
+
+    // Start the timer for the next player
+    timerCubit.startTimer(_currentPlayer);
+  } else {
+    emit(InvalidMoveAttempted('Move not valid',isInCheck));
   }
+}
+
 
   bool _doesMoveResolveCheck(int fromIndex, int toIndex, PlayerType playerType,
       String rank, String player) {
