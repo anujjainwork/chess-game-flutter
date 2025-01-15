@@ -13,8 +13,10 @@ final class BoardLogicInitial extends BoardLogicState {}
 final class BoardLoaded extends BoardLogicState {
   final List<BoardCellModel> board;
   final PlayerType currentPlayer;
+  final List<PieceEntity> capturedPiecesWhite;
+  final List<PieceEntity> capturedPiecesBlack;
 
-  BoardLoaded(this.board, this.currentPlayer);
+  BoardLoaded(this.board, this.currentPlayer, this.capturedPiecesWhite, this.capturedPiecesBlack);
 }
 
 final class PieceSelected extends BoardLogicState {
