@@ -141,6 +141,13 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         );
 
   if (isValid) {
+    
+    if (_board[event.toIndex].hasPiece) {
+        _currentPlayer == PlayerType.white
+            ? _capturedPiecesWhite.add(_board[event.toIndex].pieceEntity!)
+            : _capturedPiecesBlack.add(_board[event.toIndex].pieceEntity!);
+      }
+
     // Perform the move
     _board[event.toIndex] = BoardCellModel(
       cellPosition: event.toIndex,
@@ -164,7 +171,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     } else {
       _currentPlayer = _switchPlayer(_currentPlayer);
       emit(PieceMoved(event.fromIndex, event.toIndex));
-      emit(BoardLoaded(_board, _currentPlayer));
+      emit(BoardLoaded(_board, _currentPlayer,_capturedPiecesWhite,_capturedPiecesBlack));
     }
 
     // Start the timer for the next player
