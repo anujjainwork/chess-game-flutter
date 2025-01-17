@@ -1,4 +1,4 @@
-import 'package:chess/board/presentation/view/board_view.dart';
+import 'package:chess/features/board/presentation/view/board_view.dart';
 import 'package:chess/routes/routing_fade_animation.dart';
 import 'package:flutter/material.dart';
 

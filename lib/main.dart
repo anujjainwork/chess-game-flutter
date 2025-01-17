@@ -1,4 +1,4 @@
-import 'package:chess/homepage/presentation/view/homepage.dart';
+import 'package:chess/features/homepage/presentation/view/homepage.dart';
 import 'package:chess/routes/routes.dart';
 import 'package:flutter/material.dart';
 
