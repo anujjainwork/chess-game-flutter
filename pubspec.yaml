@@ -15,6 +15,9 @@ dependencies:
   bloc:
   flutter_bloc:
   equatable:
+  url_launcher:
+  font_awesome_flutter:
+  webview_flutter:
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +40,4 @@ flutter:
     - lib/assets/rook_black.svg
     - lib/assets/rook_white.svg
     - lib/assets/king_bg.png
+    - lib/assets/anuj.jpg
