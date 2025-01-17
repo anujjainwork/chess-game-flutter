@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadImage() async {
-    final ImageStream stream = AssetImage('lib/assets/king_bg.png')
+    final ImageStream stream = const AssetImage('lib/assets/king_bg.png')
         .resolve(const ImageConfiguration());
     stream.addListener(
       ImageStreamListener(
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     onPressed: () {
-                      // Handle Know About the Developer Button Press
+                      Navigator.pushNamed(context, AppRouteNames.aboutTheDev);
                     },
                     child: Text(
                       'Know about the developer',
