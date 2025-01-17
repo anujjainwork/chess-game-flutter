@@ -3,6 +3,7 @@ import 'package:chess/board/presentation/cubit/timer_cubit.dart';
 import 'package:chess/board/presentation/widget/board_widget.dart';
 import 'package:chess/board/presentation/widget/captured_piece_widget.dart';
 import 'package:chess/board/presentation/widget/timer_widget.dart';
+import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,7 @@ class BoardGameView extends StatelessWidget {
       ],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.darkGreenBackgroundColor,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -41,34 +42,35 @@ class BoardGameView extends StatelessWidget {
                       state is IsCheckState) {
                     // Ensure the board is always displayed
                     return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             getCapturedPiecesWidget(
-                                bloc.capturedPiecesBlack, context),
+                                bloc.capturedPiecesBlack, context,true),
                             getTimerWidget(false),
                           ],
                         ),
                         SizedBox(
                           height: getDynamicHeight(context, 2),
                         ),
-                        getBoardGameWidget(bloc.board, bloc, state),
+                        getBoardGameWidget(bloc.board, bloc, state,context),
                         SizedBox(
                           height: getDynamicHeight(context, 2),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            getCapturedPiecesWidget(
-                                bloc.capturedPiecesWhite, context),
                             getTimerWidget(true),
+                            getCapturedPiecesWidget(
+                                bloc.capturedPiecesWhite, context,false),
                           ],
                         ),
                       ],
                     );
                   } else if (state is InvalidMoveAttempted) {
-                    return getBoardGameWidget(bloc.board, bloc, state);
+                    return getBoardGameWidget(bloc.board, bloc, state,context);
                   } else {
                     return const Center(child: Text('Something went wrong!'));
                   }

@@ -1,10 +1,11 @@
 import 'package:chess/board/business/entity/piece_entity.dart';
+import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
 import 'package:chess/pieces/map_piece_icons.dart';
 import 'package:flutter/material.dart';
 
 Widget getCapturedPiecesWidget(
-    List<PieceEntity> capturedPieces, BuildContext context) {
+    List<PieceEntity> capturedPieces, BuildContext context,bool isForWhite) {
   // Group pieces by pieceId
   final Map<String, int> pieceCount = {};
   for (var piece in capturedPieces) {
@@ -15,6 +16,19 @@ Widget getCapturedPiecesWidget(
   final containerWidth = getDynamicWidth(context, 60);
   final baseIconSize = getDynamicWidth(context, 8);
   final iconSpacing = getDynamicWidth(context, 0.3);
+
+  // If there are no captured pieces, return a default size
+  if (capturedPieces.isEmpty) {
+    return Container(
+      width: containerWidth,
+      height: baseIconSize + iconSpacing, // Default height
+      decoration: BoxDecoration(
+        color: isForWhite?AppColors.darkGreenBoxColor:
+        AppColors.lightGreenBoxColor,
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+    );
+  }
 
   // Calculate total icons and required rows
   final totalIcons = pieceCount.keys.length;
@@ -28,7 +42,9 @@ Widget getCapturedPiecesWidget(
     width: containerWidth,
     height: (rows * (iconSize + iconSpacing) + iconSpacing).toDouble(),
     decoration: BoxDecoration(
-      color: Colors.grey,
+      color: isForWhite?
+      AppColors.lightGreenBoxColor:
+      AppColors.darkGreenBoxColor,
       borderRadius: BorderRadius.circular(4.0),
     ),
     child: Wrap(

@@ -58,6 +58,10 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       // Determine if the current state is IsCheckState
       final isInCheck = (state is IsCheckState || stillCheckAfterInvalidMove);
 
+      int originalKingIndex = _currentPlayer == PlayerType.white
+            ? whiteKingIndex
+            : blackKingIndex; // Store the original king index
+
       // Calculate valid moves based on the check state
       final validMoves = _board
           .asMap()
@@ -81,6 +85,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
                 fromIndex: event.cellIndex,
                 toIndex: toIndex,
                 board: _board,
+                kingIndex: originalKingIndex
               );
             }
           })
@@ -123,6 +128,8 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   final isInCheck = state is ValidMovesHighlighted
       ? (state as ValidMovesHighlighted).isInCheck ?? false
       : false;
+  
+  int originalKingIndex = _currentPlayer == PlayerType.white?whiteKingIndex:blackKingIndex;
 
   final isValid = isInCheck
       ? _doesMoveResolveCheck(
@@ -138,6 +145,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           fromIndex: event.fromIndex,
           toIndex: event.toIndex,
           board: _board,
+          kingIndex: originalKingIndex
         );
 
   if (isValid) {
@@ -188,12 +196,17 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     final backupTo = _board[toIndex]; // Backup the "to" cell
     int? originalKingIndex; // To store the original king's index if updated
 
+    originalKingIndex = playerType == PlayerType.white
+            ? whiteKingIndex
+            : blackKingIndex;
+            
     if (isValidMove(
       rank: rank,
       player: player,
       fromIndex: fromIndex,
       toIndex: toIndex,
       board: _board,
+      kingIndex: originalKingIndex
     )) {
       // Simulate the move
       _board[toIndex] = BoardCellModel(
@@ -249,6 +262,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           fromIndex: cell.cellPosition,
           toIndex: kingIndex,
           board: _board,
+          kingIndex: kingIndex
         )) {
           return true;
         }
@@ -273,6 +287,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           fromIndex: cell.cellPosition,
           toIndex: kingIndex,
           board: _board,
+          kingIndex: kingIndex
         )) {
           return true;
         }
