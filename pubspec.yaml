@@ -14,6 +14,7 @@ dependencies:
   flutter_svg:
   bloc:
   flutter_bloc:
+  equatable:
 
 dev_dependencies:
   flutter_test:
@@ -35,3 +36,4 @@ flutter:
     - lib/assets/queen_white.svg
     - lib/assets/rook_black.svg
     - lib/assets/rook_white.svg
+    - lib/assets/king_bg.png

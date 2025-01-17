@@ -1,4 +1,5 @@
-import 'package:chess/board/presentation/view/board_view.dart';
+import 'package:chess/homepage/presentation/view/homepage.dart';
+import 'package:chess/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +12,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: BoardGameView()
+       onGenerateRoute: AppRouter.onGenerateRoute,
+      home: HomePage (), 
     );
   }
 }
