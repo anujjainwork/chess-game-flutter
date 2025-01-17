@@ -6,6 +6,7 @@ bool isValidMove({
   required int fromIndex,
   required int toIndex,
   required List<BoardCellModel> board,
+  required int kingIndex
 }) {
   int fromRow = fromIndex ~/ 8;
   int fromCol = fromIndex % 8;
