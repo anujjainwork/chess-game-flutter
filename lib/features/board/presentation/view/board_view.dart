@@ -24,6 +24,7 @@ class BoardGameView extends StatelessWidget {
           BlocProvider<BoardLogicBloc>(
             create: (context) => BoardLogicBloc(
               timerCubit: context.read<TimerCubit>(),
+              gameStatusBloc: context.read<GameStatusBloc>()
             )..add(InitializeBoard()),
           ),
         ],
@@ -40,7 +41,7 @@ class BoardGameView extends StatelessWidget {
                         return boardGameBlocBuilder(
                             context.read<GameStatusBloc>());
 
-                      case const (WhiteWon):
+                      case const (WhiteWonState):
                         return const Center(
                           child: Text(
                             'White Won!',
@@ -48,7 +49,7 @@ class BoardGameView extends StatelessWidget {
                           ),
                         );
 
-                      case const (BlackWon):
+                      case const (BlackWonState):
                         return const Center(
                           child: Text(
                             'Black Won!',
@@ -87,6 +88,13 @@ class BoardGameView extends StatelessWidget {
                       case const (ResignCancelledState):
                         return boardGameBlocBuilder(
                             context.read<GameStatusBloc>());
+                      case const (PlayerIsCheckMated):
+                        return Center(
+                          child: Text(
+                            '${gameState.props[1]} checkmated ${gameState.props[0]}',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
                       default:
                         print('Unexpected game state: $gameState');
                         return const Center(

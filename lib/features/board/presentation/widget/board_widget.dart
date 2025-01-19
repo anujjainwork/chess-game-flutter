@@ -10,13 +10,11 @@ Widget getBoardGameWidget(
     List<BoardCellModel> initialBoard, BoardLogicBloc bloc, BoardLogicState state, BuildContext context) {
   List<BoardCellModel> board = initialBoard;
   int? selectedCellIndex;
-  PlayerType? currentPlayer;
   List<int>? validMoves;
   List<int>? attackingPiecesIndices;
 
   if (state is BoardLoaded) {
     board = state.board;
-    currentPlayer = state.currentPlayer;
   } else if (state is ValidMovesHighlighted) {
     board = state.board;
     selectedCellIndex = state.selectedCellIndex;
@@ -24,10 +22,8 @@ Widget getBoardGameWidget(
   } else if (state is PieceSelected) {
     board = state.board;
     selectedCellIndex = state.selectedCellIndex;
-    currentPlayer = state.currentPlayer;
   } else if (state is IsCheckState) {
     board = state.board;
-    currentPlayer = state.currentPlayer;
   }
 
   final labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];

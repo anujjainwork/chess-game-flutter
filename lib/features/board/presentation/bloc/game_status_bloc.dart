@@ -15,17 +15,28 @@ class GameStatusBloc extends Bloc<GameStatusEvent, GameStatusState> {
     on<InitiateResign>(_handleInitialiseResign);
     on<ConfirmResign>(_handleConfirmResign);
     on<CancelResign>(_handleCancelResign);
+    on<WhiteWonEvent>(_handleWhiteWonEvent);
+    on<BlackWonEvent>(_handleBlackWonEvent);
+    on<PlayerCheckMated>(_handlePlayerCheckMated);
+  }
+
+  @override
+  void onTransition(
+    Transition<GameStatusEvent, GameStatusState> transition,
+  ) {
+    super.onTransition(transition);
+    print('Game State Transition to:  ${transition.nextState}');
   }
 
   // Event Handlers
   void _handleWhiteTimeOut(
       WhiteTimeIsOut event, Emitter<GameStatusState> emit) {
-    emit(const BlackWon(player: PlayerType.black));
+    emit(const BlackWonState(player: PlayerType.black));
   }
 
   void _handleBlackTimeOut(
       BlackTimeIsOut event, Emitter<GameStatusState> emit) {
-    emit(const WhiteWon(player: PlayerType.white));
+    emit(const WhiteWonState(player: PlayerType.white));
   }
 
   void _handleInitiateDraw(InitiateDraw event, Emitter<GameStatusState> emit) {
@@ -52,5 +63,24 @@ class GameStatusBloc extends Bloc<GameStatusEvent, GameStatusState> {
 
   void _handleCancelResign(CancelResign event, Emitter<GameStatusState> emit) {
     emit(const ResignCancelledState());
+  }
+
+  void _handleWhiteWonEvent(
+      WhiteWonEvent event, Emitter<GameStatusState> emit) {
+    emit(WhiteWonState(player: event.player));
+  }
+
+  void _handleBlackWonEvent(
+      BlackWonEvent event, Emitter<GameStatusState> emit) {
+    emit(BlackWonState(player: event.player));
+  }
+
+  void _handlePlayerCheckMated(
+      PlayerCheckMated event, Emitter<GameStatusState> emit) {
+    final losingPlayer = event.attackingPlayer == PlayerType.white
+        ? PlayerType.black
+        : PlayerType.white;
+    emit(PlayerIsCheckMated(
+        losingPlayer: losingPlayer, winningPlayer: event.attackingPlayer));
   }
 }

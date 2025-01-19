@@ -42,3 +42,18 @@ class CancelResign extends GameStatusEvent {
 class BlackTimeIsOut extends GameStatusEvent {}
 
 class WhiteTimeIsOut extends GameStatusEvent {}
+
+class BlackWonEvent extends GameStatusEvent {
+  final PlayerType player;
+  const BlackWonEvent({required this.player});
+}
+
+class WhiteWonEvent extends GameStatusEvent {
+  final PlayerType player;
+  const WhiteWonEvent({required this.player});
+}
+
+class PlayerCheckMated extends GameStatusEvent{
+  final PlayerType attackingPlayer;
+  PlayerCheckMated({required this.attackingPlayer});
+}
