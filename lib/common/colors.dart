@@ -5,7 +5,7 @@ class AppColors {
   static const blackCellColor = Color.fromRGBO(7, 80, 35, 1);
   static const darkGreenBackgroundColor = Color.fromRGBO(7, 54, 35, 0.4);
   static const darkGreenBoxColor = Color.fromRGBO(51, 80, 74, 0.5);
-  static const lightGreenBoxColor = Color.fromRGBO(51, 80, 74, 0.7);
+  static const lightGreenBoxColor = Color.fromRGBO(51, 80, 74, 0.8);
 
   static const boxColor1 = Color.fromRGBO(240, 255, 255, 0.1);
   static const boardWidgetGradient = LinearGradient(

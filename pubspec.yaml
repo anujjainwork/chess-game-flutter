@@ -41,3 +41,5 @@ flutter:
     - lib/assets/rook_white.svg
     - lib/assets/king_bg.png
     - lib/assets/anuj.jpg
+    - lib/assets/draw-button.svg
+    - lib/assets/resign.svg
