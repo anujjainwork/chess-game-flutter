@@ -63,7 +63,7 @@ Widget getCapturedPiecesWidget(
                 clipBehavior: Clip.none,
                 alignment: Alignment.topRight,
                 children: [
-                  Container(
+                  SizedBox(
                     width: iconSize,
                     height: iconSize,
                     child: getPieceIcon(entry.key),

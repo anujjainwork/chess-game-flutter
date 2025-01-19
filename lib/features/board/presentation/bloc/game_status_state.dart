@@ -17,12 +17,12 @@ final class GameEnded extends GameStatusState {
   const GameEnded(PlayerType? player) : super(player);
 }
 
-final class WhiteWon extends GameStatusState {
-  const WhiteWon({required PlayerType player}) : super(player);
+final class WhiteWonState extends GameStatusState {
+  const WhiteWonState({required PlayerType player}) : super(player);
 }
 
-final class BlackWon extends GameStatusState {
-  const BlackWon({required PlayerType player}) : super(player);
+final class BlackWonState extends GameStatusState {
+  const BlackWonState({required PlayerType player}) : super(player);
 }
 
 final class DrawInitiatedState extends GameStatusState {
@@ -47,4 +47,17 @@ final class ResignCancelledState extends GameStatusState {
 
 final class ResignConfirmedState extends GameStatusState {
   const ResignConfirmedState({required PlayerType player}) : super(player);
+}
+
+final class PlayerIsCheckMated extends GameStatusState {
+  final PlayerType losingPlayer;
+  final PlayerType winningPlayer;
+
+  const PlayerIsCheckMated({
+    required this.losingPlayer,
+    required this.winningPlayer,
+  }) : super(null);
+
+  @override
+  List<Object?> get props => [losingPlayer, winningPlayer];
 }
