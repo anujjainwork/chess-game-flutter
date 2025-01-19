@@ -18,20 +18,23 @@ Widget getTimerWidget(bool isWhite) {
           return '$minutes:$seconds';
         }
 
-        return Container(
-          height: getDynamicHeight(context, 6),
-          width: getDynamicWidth(context, 20),
-          decoration: BoxDecoration(
-            gradient: AppColors.timerWidgetGradient,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Center(
-            child: Text(
-              isWhite ? formatTime(whiteTime) : formatTime(blackTime),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 255, 255, 0.6),
+        return Transform.rotate(
+          angle: isWhite ? 0 : 3.14159,
+          child: Container(
+            height: getDynamicHeight(context, 6),
+            width: getDynamicWidth(context, 20),
+            decoration: BoxDecoration(
+              gradient: AppColors.timerWidgetGradient,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Center(
+              child: Text(
+                isWhite ? formatTime(whiteTime) : formatTime(blackTime),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(255, 255, 255, 0.6),
+                ),
               ),
             ),
           ),

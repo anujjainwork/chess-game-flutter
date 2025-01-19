@@ -107,9 +107,10 @@ Widget getBoardGameWidget(
                                       : AppColors.blackCellColor),
                         ),
                         child: board[index].hasPiece
-                            ? Center(
+                            ? Transform.rotate(angle: board[index].pieceEntity!.playerType==PlayerType.white?0:3.14159,
+                            child: Center(
                                 child: getPieceIcon(board[index].pieceEntity!.pieceId),
-                              )
+                              ),)
                             : null,
                       ),
                     );

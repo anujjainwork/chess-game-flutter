@@ -1,9 +1,9 @@
 import 'package:chess/features/board/presentation/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
+import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
 import 'package:chess/features/board/presentation/cubit/timer_cubit.dart';
-import 'package:chess/features/board/presentation/cubit/game_cubit.dart';
-import 'package:chess/features/board/presentation/widget/board_full_widget.dart';
 import 'package:chess/common/colors.dart';
+import 'package:chess/features/board/presentation/widget/game_draw_resign_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,52 +12,97 @@ class BoardGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<GameStatusCubit>(
-      create: (_) => GameStatusCubit(),
+    return BlocProvider<GameStatusBloc>(
+      create: (_) => GameStatusBloc(),
       child: MultiBlocProvider(
         providers: [
           BlocProvider<TimerCubit>(
-            create: (context) => TimerCubit(winCubit: context.read<GameStatusCubit>()),
+            create: (context) => TimerCubit(
+              gameStatusBloc: context.read<GameStatusBloc>(),
+            ),
           ),
           BlocProvider<BoardLogicBloc>(
-            create: (context) =>
-                BoardLogicBloc(timerCubit: context.read<TimerCubit>())
-                  ..add(InitializeBoard()),
+            create: (context) => BoardLogicBloc(
+              timerCubit: context.read<TimerCubit>(),
+            )..add(InitializeBoard()),
           ),
         ],
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: AppColors.darkGreenBackgroundColor,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              BlocBuilder<GameStatusCubit, GameStatusState>(
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: AppColors.darkGreenBackgroundColor,
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                BlocBuilder<GameStatusBloc, GameStatusState>(
                   builder: (context, gameState) {
-                    if (gameState is GameStarted) {
-                      return boardGameBlocBuilder();
-                    } 
-                    else if(gameState is WhiteWon){
-                      return const Center(
-                        child: Text('White Won!',style: TextStyle(color: Colors.white),),
-                      );
-                    }
-                    else if(gameState is BlackWon){
-                      return const Center(
-                        child: Text('Black Won!',style: TextStyle(color: Colors.white),),
-                      );
-                    }
-                    else {
-                      return const Center(
-                        child: Text('Unexpected game state!',style: TextStyle(color: Colors.white),),
-                      );
+                    switch (gameState.runtimeType) {
+                      case const (GameStarted):
+                        return boardGameBlocBuilder(
+                            context.read<GameStatusBloc>());
+
+                      case const (WhiteWon):
+                        return const Center(
+                          child: Text(
+                            'White Won!',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+
+                      case const (BlackWon):
+                        return const Center(
+                          child: Text(
+                            'Black Won!',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+
+                      case const (GameDraw):
+                        return const Center(
+                          child: Text(
+                            'Game is now draw!',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+
+                      case const (DrawInitiatedState):
+                        return getGameDrawOrResignWidget(context,
+                            context.read<GameStatusBloc>(), gameState, true);
+
+                      case const (DrawDeniedState):
+                        return boardGameBlocBuilder(
+                            context.read<GameStatusBloc>());
+
+                      case const (ResignInitiatedState):
+                        return getGameDrawOrResignWidget(context,
+                            context.read<GameStatusBloc>(), gameState, false);
+
+                      case const (ResignConfirmedState):
+                        return Center(
+                          child: Text(
+                            '${gameState.player} resigned',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+
+                      case const (ResignCancelledState):
+                        return boardGameBlocBuilder(
+                            context.read<GameStatusBloc>());
+                      default:
+                        print('Unexpected game state: $gameState');
+                        return const Center(
+                          child: Text(
+                            'Unexpected game state!',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
                     }
                   },
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    )
     );
   }
 }
