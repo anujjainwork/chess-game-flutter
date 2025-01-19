@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/player_model.dart';
+import 'package:chess/features/board/presentation/cubit/game_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'timer_state.dart';
 
 class TimerCubit extends Cubit<TimerState> {
-  TimerCubit() : super(TimerInitial());
+  final GameStatusCubit winCubit;
+  TimerCubit({required this.winCubit}) : super(TimerInitial());
 
   PlayerModel whitePlayer = PlayerModel(
       playerType: PlayerType.white,
@@ -30,13 +32,14 @@ class TimerCubit extends Cubit<TimerState> {
         whitePlayer = whitePlayer.copyWith(
           playerTimeLeft: const Duration(minutes: 10) - Duration(seconds: _elapsedTimeWhite),
         );
+        if(whitePlayer.playerTimeLeft== const Duration(seconds: 0))winCubit.whiteTimeIsOut();
       } else {
         _elapsedTimeBlack++;
         blackPlayer = blackPlayer.copyWith(
           playerTimeLeft: const Duration(minutes: 10) - Duration(seconds: _elapsedTimeBlack),
         );
+        if(blackPlayer.playerTimeLeft==const Duration(seconds: 0))winCubit.blackTimeIsOut();
       }
-
       emit(TimerUpdated(whitePlayer, blackPlayer));
     });
   }

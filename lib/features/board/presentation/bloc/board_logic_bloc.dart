@@ -192,9 +192,9 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
   bool _doesMoveResolveCheck(int fromIndex, int toIndex, PlayerType playerType,
       String rank, String player) {
-    final backupFrom = _board[fromIndex]; // Backup the "from" cell
-    final backupTo = _board[toIndex]; // Backup the "to" cell
-    int? originalKingIndex; // To store the original king's index if updated
+    final backupFrom = _board[fromIndex];
+    final backupTo = _board[toIndex];
+    int? originalKingIndex;
 
     originalKingIndex = playerType == PlayerType.white
             ? whiteKingIndex
@@ -224,12 +224,11 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       if (rank == 'king') {
         originalKingIndex = playerType == PlayerType.white
             ? whiteKingIndex
-            : blackKingIndex; // Store the original king index
+            : blackKingIndex; 
         _updateKingIndex(
-            _board[toIndex], toIndex); // Update the king's position
+            _board[toIndex], toIndex);
       }
 
-      // Check if the move resolves the check
       final resolvesCheck = !_isKingStillInCheck(playerType);
 
       // Undo the move
@@ -252,7 +251,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         ? kingIndex = blackKingIndex
         : kingIndex = whiteKingIndex;
 
-    print('player type ${player}');
     // Validate if any opponent piece can attack the king
     for (final cell in _board) {
       if (cell.hasPiece && cell.pieceEntity!.playerType == player) {
@@ -277,7 +275,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         ? kingIndex = blackKingIndex
         : kingIndex = whiteKingIndex;
 
-    print('player type ${player}');
     // Validate if any opponent piece can attack the king
     for (final cell in _board) {
       if (cell.hasPiece && cell.pieceEntity!.playerType != player) {
