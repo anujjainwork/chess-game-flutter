@@ -18,6 +18,7 @@ dependencies:
   url_launcher:
   font_awesome_flutter:
   webview_flutter:
+  lottie:
 
 dev_dependencies:
   flutter_test:
@@ -45,4 +46,5 @@ flutter:
     - lib/assets/resign.svg
     - lib/assets/forward-button.svg
     - lib/assets/back-button.svg
-
+    - lib/assets/lottie/win_animation.json
+    - lib/assets/lottie/draw.json
