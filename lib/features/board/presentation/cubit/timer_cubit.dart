@@ -37,8 +37,8 @@ class TimerCubit extends Cubit<TimerState> {
               Duration(seconds: _elapsedTimeWhite),
         );
         if (whitePlayer.playerTimeLeft == const Duration(seconds: 0)) {
-          gameStatusBloc.add(WhiteTimeIsOut());
-          stopTimer(); // Stop the timer when time runs out
+          // gameStatusBloc.add(WhiteTimeIsOut());
+          // stopTimer(); // Stop the timer when time runs out
         }
       } else if (_currentPlayer == PlayerType.black) {
         _elapsedTimeBlack++;
@@ -47,8 +47,8 @@ class TimerCubit extends Cubit<TimerState> {
               Duration(seconds: _elapsedTimeBlack),
         );
         if (blackPlayer.playerTimeLeft == const Duration(seconds: 0)) {
-          gameStatusBloc.add(BlackTimeIsOut());
-          stopTimer(); // Stop the timer when time runs out
+          // gameStatusBloc.add(BlackTimeIsOut());
+          // stopTimer(); // Stop the timer when time runs out
         }
       }
       emit(TimerUpdated(whitePlayer, blackPlayer));

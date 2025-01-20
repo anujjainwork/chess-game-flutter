@@ -43,3 +43,6 @@ flutter:
     - lib/assets/anuj.jpg
     - lib/assets/draw-button.svg
     - lib/assets/resign.svg
+    - lib/assets/forward-button.svg
+    - lib/assets/back-button.svg
+

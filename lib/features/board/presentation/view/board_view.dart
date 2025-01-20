@@ -1,9 +1,11 @@
+import 'package:chess/features/board/business/db/initial_board.dart';
 import 'package:chess/features/board/presentation/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
 import 'package:chess/features/board/presentation/cubit/timer_cubit.dart';
 import 'package:chess/common/colors.dart';
-import 'package:chess/features/board/presentation/widget/game_draw_resign_widget.dart';
+import 'package:chess/features/board/presentation/widget/confirmation_draw_resign_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,10 +23,14 @@ class BoardGameView extends StatelessWidget {
               gameStatusBloc: context.read<GameStatusBloc>(),
             ),
           ),
+          BlocProvider<MoveHistoryCubit>(
+            create: (context) => MoveHistoryCubit(),
+          ),
           BlocProvider<BoardLogicBloc>(
             create: (context) => BoardLogicBloc(
               timerCubit: context.read<TimerCubit>(),
-              gameStatusBloc: context.read<GameStatusBloc>()
+              gameStatusBloc: context.read<GameStatusBloc>(),
+              moveHistoryCubit:context.read<MoveHistoryCubit>(),
             )..add(InitializeBoard()),
           ),
         ],
@@ -39,7 +45,7 @@ class BoardGameView extends StatelessWidget {
                     switch (gameState.runtimeType) {
                       case const (GameStarted):
                         return boardGameBlocBuilder(
-                            context.read<GameStatusBloc>());
+                            context.read<GameStatusBloc>(),context.read<MoveHistoryCubit>());
 
                       case const (WhiteWonState):
                         return const Center(
@@ -67,15 +73,15 @@ class BoardGameView extends StatelessWidget {
 
                       case const (DrawInitiatedState):
                         return getGameDrawOrResignWidget(context,
-                            context.read<GameStatusBloc>(), gameState, true);
+                            context.read<GameStatusBloc>(), gameState, context.read<MoveHistoryCubit>(),true);
 
                       case const (DrawDeniedState):
                         return boardGameBlocBuilder(
-                            context.read<GameStatusBloc>());
+                            context.read<GameStatusBloc>(),context.read<MoveHistoryCubit>());
 
                       case const (ResignInitiatedState):
                         return getGameDrawOrResignWidget(context,
-                            context.read<GameStatusBloc>(), gameState, false);
+                            context.read<GameStatusBloc>(), gameState, context.read<MoveHistoryCubit>(),false);
 
                       case const (ResignConfirmedState):
                         return Center(
@@ -87,7 +93,7 @@ class BoardGameView extends StatelessWidget {
 
                       case const (ResignCancelledState):
                         return boardGameBlocBuilder(
-                            context.read<GameStatusBloc>());
+                            context.read<GameStatusBloc>(),context.read<MoveHistoryCubit>());
                       case const (PlayerIsCheckMated):
                         return Center(
                           child: Text(

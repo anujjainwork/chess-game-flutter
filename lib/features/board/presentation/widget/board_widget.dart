@@ -4,16 +4,21 @@ import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
 import 'package:chess/common/map_piece_icons.dart';
+import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
 import 'package:flutter/material.dart';
 
 Widget getBoardGameWidget(
-    List<BoardCellModel> initialBoard, BoardLogicBloc bloc, BoardLogicState state, BuildContext context) {
+    List<BoardCellModel> initialBoard, BoardLogicBloc bloc, BoardLogicState state, MoveHistoryState moveHistoryState,BuildContext context) {
   List<BoardCellModel> board = initialBoard;
   int? selectedCellIndex;
   List<int>? validMoves;
   List<int>? attackingPiecesIndices;
 
-  if (state is BoardLoaded) {
+  if(moveHistoryState is MoveRedo || moveHistoryState is MoveUndo)
+  {
+    initialBoard = moveHistoryState.props[0] as List<BoardCellModel>;
+  }
+  else if (state is BoardLoaded) {
     board = state.board;
   } else if (state is ValidMovesHighlighted) {
     board = state.board;

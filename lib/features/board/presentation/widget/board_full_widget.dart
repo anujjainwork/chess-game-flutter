@@ -1,20 +1,36 @@
 import 'package:chess/common/utils.dart';
+import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
 import 'package:chess/features/board/presentation/widget/board_widget.dart';
 import 'package:chess/features/board/presentation/widget/captured_piece_widget.dart';
+import 'package:chess/features/board/presentation/widget/move_history_widget.dart';
 import 'package:chess/features/board/presentation/widget/resign_draw_widget.dart';
 import 'package:chess/features/board/presentation/widget/timer_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget getBoardFullWidget(
-    BuildContext context, BoardLogicBloc bloc, BoardLogicState state, GameStatusBloc gameStatusBloc) {
+    BuildContext context,
+    BoardLogicBloc bloc,
+    BoardLogicState state,
+    GameStatusBloc gameStatusBloc,
+    MoveHistoryCubit moveHistoryCubit) {
   return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          getResignDrawWidgets(context, MainAxisAlignment.end,gameStatusBloc,false),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              getMoveHistoryWidgets(
+                  context, MainAxisAlignment.spaceEvenly, moveHistoryCubit, false),
+              getResignDrawWidgets(
+                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, false),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -25,7 +41,20 @@ Widget getBoardFullWidget(
           SizedBox(
             height: getDynamicHeight(context, 2),
           ),
-          getBoardGameWidget(bloc.board, bloc, state, context),
+          BlocBuilder<MoveHistoryCubit, MoveHistoryState>(
+            builder: (context, moveHistoryState) {
+              if (moveHistoryState is MoveUndo||moveHistoryState is MoveRedo) {
+                return getBoardGameWidget(
+                    moveHistoryState.props[0] as List<BoardCellModel>,
+                    bloc,
+                    state,
+                    moveHistoryState,
+                    context);
+              }
+              return getBoardGameWidget(bloc.board, bloc, state, moveHistoryState,context);
+            },
+          ),
+          // getBoardGameWidget(bloc.board, bloc, state, context),
           SizedBox(
             height: getDynamicHeight(context, 2),
           ),
@@ -36,7 +65,15 @@ Widget getBoardFullWidget(
               getCapturedPiecesWidget(bloc.capturedPiecesWhite, context, false),
             ],
           ),
-          getResignDrawWidgets(context, MainAxisAlignment.end,gameStatusBloc,true),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              getResignDrawWidgets(
+                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, true),
+              getMoveHistoryWidgets(
+                  context, MainAxisAlignment.spaceEvenly, moveHistoryCubit, true),
+            ],
+          ),
         ],
       ));
 }
