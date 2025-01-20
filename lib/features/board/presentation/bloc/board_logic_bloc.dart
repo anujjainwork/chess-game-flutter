@@ -3,6 +3,7 @@ import 'package:chess/features/board/business/db/initial_board.dart';
 import 'package:chess/features/board/business/entity/piece_entity.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
+import 'package:chess/features/board/data/repository_impl/is_pinned.dart';
 import 'package:chess/features/board/data/repository_impl/move_validation.dart';
 import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
 import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
@@ -94,7 +95,13 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
                   fromIndex: event.cellIndex,
                   toIndex: toIndex,
                   board: _board,
-                  kingIndex: originalKingIndex);
+                  kingIndex: originalKingIndex) && 
+                  ! isPinned(
+                      fromIndex: event.cellIndex,
+                      board: _board,
+                      player: _currentPlayer,
+                      whiteKingIndex: whiteKingIndex,
+                      blackKingIndex: blackKingIndex);
             }
           })
           .map((entry) => entry.key)
@@ -157,8 +164,10 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
             toIndex: event.toIndex,
             board: _board,
             kingIndex: originalKingIndex);
+    
+    final isSelectedPiecePinned = isPinned(fromIndex: event.fromIndex,board: _board,player: _currentPlayer,whiteKingIndex: whiteKingIndex,blackKingIndex: blackKingIndex);
 
-    if (isValid) {
+    if (isValid && !isSelectedPiecePinned) {
       if (_board[event.toIndex].hasPiece) {
         _currentPlayer == PlayerType.white
             ? _capturedPiecesWhite.add(_board[event.toIndex].pieceEntity!)
@@ -184,7 +193,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       _updateKingIndex(movingPiece, event.toIndex);
 
       // Check if the move places the opponent in check
-      if (_isKingInCheck(_currentPlayer)) {
+      if (_isKingInCheck(_currentPlayer,_board)) {
         if (_isCheckmate(_currentPlayer)) {
           gameStatusBloc.add(PlayerCheckMated(attackingPlayer: _currentPlayer));
         } else {
@@ -240,7 +249,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         _updateKingIndex(_board[toIndex], toIndex);
       }
 
-      final resolvesCheck = !_isKingStillInCheck(playerType);
+      final resolvesCheck = !_isKingStillInCheck(playerType,_board);
 
       // Undo the move
       _board[fromIndex] = backupFrom;
@@ -256,21 +265,22 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     return false;
   }
 
-  bool _isKingInCheck(PlayerType player) {
+
+  bool _isKingInCheck(PlayerType player,List<BoardCellModel> board1) {
     int kingIndex;
     player == PlayerType.white
         ? kingIndex = blackKingIndex
         : kingIndex = whiteKingIndex;
 
     // Validate if any opponent piece can attack the king
-    for (final cell in _board) {
+    for (final cell in board1) {
       if (cell.hasPiece && cell.pieceEntity!.playerType == player) {
         if (isValidMove(
             rank: cell.pieceEntity!.rank,
             player: cell.pieceEntity!.player,
             fromIndex: cell.cellPosition,
             toIndex: kingIndex,
-            board: _board,
+            board: board1,
             kingIndex: kingIndex)) {
           return true;
         }
@@ -279,21 +289,21 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     return false;
   }
 
-  bool _isKingStillInCheck(PlayerType player) {
+  bool _isKingStillInCheck(PlayerType player,List<BoardCellModel>board2) {
     int kingIndex;
     player == PlayerType.black
         ? kingIndex = blackKingIndex
         : kingIndex = whiteKingIndex;
 
     // Validate if any opponent piece can attack the king
-    for (final cell in _board) {
+    for (final cell in board2) {
       if (cell.hasPiece && cell.pieceEntity!.playerType != player) {
         if (isValidMove(
             rank: cell.pieceEntity!.rank,
             player: cell.pieceEntity!.player,
             fromIndex: cell.cellPosition,
             toIndex: kingIndex,
-            board: _board,
+            board: board2,
             kingIndex: kingIndex)) {
           return true;
         }
