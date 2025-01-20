@@ -99,11 +99,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           })
           .map((entry) => entry.key)
           .toList();
-      if (validMoves.isEmpty) {
-        _currentPlayer == PlayerType.white
-            ? gameStatusBloc.add(WhiteWonEvent(player: _currentPlayer))
-            : gameStatusBloc.add(BlackWonEvent(player: _currentPlayer));
-      }
       emit(PieceSelected(
         selectedCell.cellPosition,
         selectedCell.pieceEntity!.playerType,
