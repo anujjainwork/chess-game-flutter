@@ -16,68 +16,47 @@ class TimerCubit extends Cubit<TimerState> {
       playerType: PlayerType.white,
       playerTimeLeft: const Duration(minutes: 10));
   PlayerModel blackPlayer = PlayerModel(
-      playerType: PlayerType.black,
-      playerTimeLeft: const Duration(minutes: 10));
+      playerType: PlayerType.black, playerTimeLeft: const Duration(minutes: 10));
 
   Timer? _timer;
   int _elapsedTimeWhite = 0;
   int _elapsedTimeBlack = 0;
-  PlayerType? _currentPlayer; // Track the active player
 
   void startTimer(PlayerType currentPlayer) {
-    if (_timer != null && _timer!.isActive)
-      return; // Guard against multiple timers
-    _currentPlayer = currentPlayer; // Update the active player
-
+    // Cancel any existing timer
+    _timer?.cancel();
+    // Start a new timer that updates every second
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_currentPlayer == PlayerType.white) {
+      if (currentPlayer == PlayerType.white) {
         _elapsedTimeWhite++;
         whitePlayer = whitePlayer.copyWith(
-          playerTimeLeft: const Duration(minutes: 10) -
-              Duration(seconds: _elapsedTimeWhite),
+          playerTimeLeft: const Duration(minutes: 10) - Duration(seconds: _elapsedTimeWhite),
         );
-        if (whitePlayer.playerTimeLeft == const Duration(seconds: 0)) {
-          // gameStatusBloc.add(WhiteTimeIsOut());
-          // stopTimer(); // Stop the timer when time runs out
-        }
-      } else if (_currentPlayer == PlayerType.black) {
+        if(whitePlayer.playerTimeLeft==const Duration(seconds: 0)) gameStatusBloc.add(WhiteTimeIsOut());
+      } else {
         _elapsedTimeBlack++;
         blackPlayer = blackPlayer.copyWith(
-          playerTimeLeft: const Duration(minutes: 10) -
-              Duration(seconds: _elapsedTimeBlack),
+          playerTimeLeft: const Duration(minutes: 10) - Duration(seconds: _elapsedTimeBlack),
         );
-        if (blackPlayer.playerTimeLeft == const Duration(seconds: 0)) {
-          // gameStatusBloc.add(BlackTimeIsOut());
-          // stopTimer(); // Stop the timer when time runs out
-        }
+        if(blackPlayer.playerTimeLeft==const Duration(seconds: 0)) gameStatusBloc.add(BlackTimeIsOut());
       }
+
       emit(TimerUpdated(whitePlayer, blackPlayer));
     });
   }
 
   void stopTimer() {
     _timer?.cancel();
-    _timer = null;
   }
 
   void resetTimer() {
     _timer?.cancel();
-    _timer = null;
-    _currentPlayer = null;
     whitePlayer = PlayerModel(
-        playerType: PlayerType.white,
-        playerTimeLeft: const Duration(minutes: 10));
+        playerType: PlayerType.white, playerTimeLeft: const Duration(minutes: 10));
     blackPlayer = PlayerModel(
-        playerType: PlayerType.black,
-        playerTimeLeft: const Duration(minutes: 10));
+        playerType: PlayerType.black, playerTimeLeft: const Duration(minutes: 10));
     _elapsedTimeWhite = 0;
     _elapsedTimeBlack = 0;
     emit(TimerUpdated(whitePlayer, blackPlayer));
-  }
-
-  @override
-  Future<void> close() {
-    _timer?.cancel(); // Ensure the timer is canceled on cubit close
-    return super.close();
   }
 }

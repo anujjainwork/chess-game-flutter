@@ -11,8 +11,7 @@ class KingImagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..imageFilter = ImageFilter.blur(sigmaX: 2, sigmaY: 2);
+    final Paint paint = Paint();
 
     final image = kingImageInfo.image;
     final imageWidth = image.width.toDouble();
@@ -20,12 +19,12 @@ class KingImagePainter extends CustomPainter {
 
     // Maintain aspect ratio
     final aspectRatio = imageWidth / imageHeight;
-    final scaleHeight = getDynamicHeight(context, 150);
+    final scaleHeight = getDynamicHeight(context, 90);
     final scaleWidth = scaleHeight * aspectRatio;
 
     // Adjust X and Y offset for positioning
-    final offsetX = getDynamicWidth(context, -140); 
-    final offsetY = size.height - scaleHeight  + getDynamicHeight(context, 40);
+    final offsetX = getDynamicWidth(context, -80); 
+    final offsetY = size.height - scaleHeight;
 
     // Define rectangle with constrained placement
     final rect = Rect.fromLTWH(
