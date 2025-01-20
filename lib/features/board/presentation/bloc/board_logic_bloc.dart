@@ -112,7 +112,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         board,
       ));
       emit(ValidMovesHighlighted(
-          event.cellIndex, validMoves, _board, isInCheck));
+          _currentPlayer, event.cellIndex, validMoves, _board, isInCheck));
     }
   }
 
@@ -212,7 +212,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       // Start the timer for the next player
       timerCubit.startTimer(_currentPlayer);
     } else {
-      emit(InvalidMoveAttempted('Move not valid', isInCheck));
+      emit(InvalidMoveAttempted('Move not valid', isInCheck,_currentPlayer));
     }
   }
 

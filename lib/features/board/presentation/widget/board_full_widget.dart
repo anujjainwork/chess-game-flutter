@@ -1,4 +1,5 @@
 import 'package:chess/common/utils.dart';
+import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
 import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
@@ -17,6 +18,7 @@ Widget getBoardFullWidget(
     BoardLogicState state,
     GameStatusBloc gameStatusBloc,
     MoveHistoryCubit moveHistoryCubit) {
+      final currentPlayer = state.props[0] as PlayerType;
   return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -25,8 +27,11 @@ Widget getBoardFullWidget(
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              getMoveHistoryWidgets(
-                  context, MainAxisAlignment.spaceEvenly, moveHistoryCubit, false),
+              Opacity(
+                opacity: currentPlayer == PlayerType.black ? 1 : 0.2,
+                child: getMoveHistoryWidgetBlack(context,
+                    MainAxisAlignment.spaceEvenly, moveHistoryCubit,currentPlayer),
+              ),
               getResignDrawWidgets(
                   context, MainAxisAlignment.spaceEvenly, gameStatusBloc, false),
             ],
@@ -70,8 +75,11 @@ Widget getBoardFullWidget(
             children: [
               getResignDrawWidgets(
                   context, MainAxisAlignment.spaceEvenly, gameStatusBloc, true),
-              getMoveHistoryWidgets(
-                  context, MainAxisAlignment.spaceEvenly, moveHistoryCubit, true),
+              Opacity(
+                opacity: currentPlayer == PlayerType.white ? 1 : 0.2,
+                child: getMoveHistoryWidgetWhite(context,
+                    MainAxisAlignment.spaceEvenly, moveHistoryCubit,currentPlayer),
+              )
             ],
           ),
         ],
