@@ -165,7 +165,9 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
             board: _board,
             kingIndex: originalKingIndex);
     
-    final isSelectedPiecePinned = isPinned(fromIndex: event.fromIndex,board: _board,player: _currentPlayer,whiteKingIndex: whiteKingIndex,blackKingIndex: blackKingIndex);
+    final isSelectedPiecePinned = isInCheck
+    ? false
+    : isPinned(fromIndex: event.fromIndex,board: _board,player: _currentPlayer,whiteKingIndex: whiteKingIndex,blackKingIndex: blackKingIndex);
 
     if (isValid && !isSelectedPiecePinned) {
       if (_board[event.toIndex].hasPiece) {
