@@ -20,13 +20,13 @@ class GameStatusBloc extends Bloc<GameStatusEvent, GameStatusState> {
     on<PlayerCheckMated>(_handlePlayerCheckMated);
   }
 
-  @override
-  void onTransition(
-    Transition<GameStatusEvent, GameStatusState> transition,
-  ) {
-    super.onTransition(transition);
-    print('Game State Transition to:  ${transition.nextState}');
-  }
+  // @override
+  // void onTransition(
+  //   Transition<GameStatusEvent, GameStatusState> transition,
+  // ) {
+  //   super.onTransition(transition);
+  //   print('Game State Transition to:  ${transition.nextState} from ${transition.currentState}');
+  // }
 
   // Event Handlers
   void _handleWhiteTimeOut(

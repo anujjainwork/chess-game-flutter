@@ -2,16 +2,17 @@ import 'package:chess/common/utils.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/presentation/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
 import 'package:flutter/material.dart';
 
 Widget getGameDrawOrResignWidget(BuildContext context, GameStatusBloc gameStatusBloc,
-    GameStatusState gameStatusState, bool isDrawCalled) {
+    GameStatusState gameStatusState, MoveHistoryCubit moveHistoryCubit, bool isDrawCalled) {
   return SizedBox(
     height: getDynamicHeight(context, 90),
     width: getDynamicWidth(context, 100),
     child: Stack(
       children: [
-        boardGameBlocBuilder(gameStatusBloc),
+        boardGameBlocBuilder(gameStatusBloc,moveHistoryCubit),
         Align(
             alignment: isDrawCalled
                 ? gameStatusState.player == PlayerType.white

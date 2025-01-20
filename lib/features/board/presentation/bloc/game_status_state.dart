@@ -17,6 +17,9 @@ final class GameEnded extends GameStatusState {
   const GameEnded(PlayerType? player) : super(player);
 }
 
+final class MoveHistoryCalled extends GameStatusState{
+}
+
 final class WhiteWonState extends GameStatusState {
   const WhiteWonState({required PlayerType player}) : super(player);
 }

@@ -5,6 +5,7 @@ import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/data/repository_impl/move_validation.dart';
 import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
 import 'package:chess/features/board/presentation/cubit/timer_cubit.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,6 +15,7 @@ part 'board_logic_state.dart';
 class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   final TimerCubit timerCubit;
   final GameStatusBloc gameStatusBloc;
+  final MoveHistoryCubit moveHistoryCubit;
 
   List<BoardCellModel> _board = [];
   int whiteKingIndex = 60;
@@ -22,7 +24,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   List<PieceEntity> _capturedPiecesWhite = [];
   List<PieceEntity> _capturedPiecesBlack = [];
 
-  BoardLogicBloc({required this.timerCubit, required this.gameStatusBloc})
+  BoardLogicBloc({required this.timerCubit, required this.gameStatusBloc, required this.moveHistoryCubit,})
       : super(BoardLogicInitial()) {
     on<InitializeBoard>(_onInitializeBoard);
     on<SelectPiece>(_onSelectPiece);
@@ -35,13 +37,13 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   List<PieceEntity> get capturedPiecesBlack => _capturedPiecesBlack;
   List<PieceEntity> get capturedPiecesWhite => _capturedPiecesWhite;
 
-  @override
-  void onTransition(
-    Transition<BoardLogicEvent, BoardLogicState> transition,
-  ) {
-    super.onTransition(transition);
-    print('Board State Transition to:  ${transition.nextState}');
-  }
+  // @override
+  // void onTransition(
+  //   Transition<BoardLogicEvent, BoardLogicState> transition,
+  // ) {
+  //   super.onTransition(transition);
+  //   print('Board State Transition to:  ${transition.nextState} from ${transition.currentState}');
+  // }
 
   void _onInitializeBoard(
       InitializeBoard event, Emitter<BoardLogicState> emit) {
@@ -180,6 +182,8 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         hasPiece: false,
         pieceEntity: null,
       );
+
+      moveHistoryCubit.makeMove(List.from(_board));
 
       // Update the king's index if necessary
       _updateKingIndex(movingPiece, event.toIndex);
