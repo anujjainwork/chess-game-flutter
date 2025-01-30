@@ -41,7 +41,7 @@ bool isPinned(
   // Check all opponent pieces that could potentially pin the piece at fromIndex
   for (final cell in board) {
     // Skip empty cells or pieces that belong to the same player
-    if (!cell.hasPiece || cell.pieceEntity!.playerType == player) continue;
+    if (!cell.hasPiece || cell.pieceEntity == null || cell.pieceEntity!.playerType == player) continue;
 
     final piece = cell.pieceEntity!;
 

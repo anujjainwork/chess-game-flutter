@@ -114,6 +114,29 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
+                  // Play 1v1 Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getDynamicWidth(context, 10),
+                        vertical: getDynamicHeight(context, 2),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRouteNames.oneVsBotGame);
+                    },
+                    child: Text(
+                      'vs Bot',
+                      style: TextStyle(
+                        fontSize: getDynamicHeight(context, 2),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: getDynamicHeight(context, 2)),
                   // Know About the Developer Button
                   ElevatedButton(
