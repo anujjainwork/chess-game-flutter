@@ -5,9 +5,9 @@ import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/data/repository_impl/is_pinned.dart';
 import 'package:chess/features/board/data/repository_impl/move_validation.dart';
-import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
-import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
-import 'package:chess/features/board/presentation/cubit/timer_cubit.dart';
+import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'board_logic_event.dart';
@@ -98,6 +98,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
                   kingIndex: originalKingIndex) && 
                   ! isPinned(
                       fromIndex: event.cellIndex,
+                      toIndex: toIndex,
                       board: _board,
                       player: _currentPlayer,
                       whiteKingIndex: whiteKingIndex,
@@ -167,7 +168,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     
     final isSelectedPiecePinned = isInCheck
     ? false
-    : isPinned(fromIndex: event.fromIndex,board: _board,player: _currentPlayer,whiteKingIndex: whiteKingIndex,blackKingIndex: blackKingIndex);
+    : isPinned(fromIndex: event.fromIndex,toIndex: event.toIndex,board: _board,player: _currentPlayer,whiteKingIndex: whiteKingIndex,blackKingIndex: blackKingIndex);
 
     if (isValid && !isSelectedPiecePinned) {
       if (_board[event.toIndex].hasPiece) {

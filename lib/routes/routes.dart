@@ -1,6 +1,6 @@
 import 'package:chess/features/about_dev/presentation/view/about_dev_view.dart';
 import 'package:chess/features/about_dev/presentation/widgets/web_view.dart';
-import 'package:chess/features/board/presentation/view/board_view.dart';
+import 'package:chess/features/1v1_mode/presentation/board_view.dart';
 import 'package:chess/routes/routing_fade_animation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class AppRouter {
     switch (settings.name) {
       case AppRouteNames.oneVsOneGame:
         return _buildFadePageRoute(
-          const BoardGameView(),
+          const OneVsOneBoardGameView(),
           name: AppRouteNames.oneVsOneGame,
         );
       case AppRouteNames.aboutTheDev:
