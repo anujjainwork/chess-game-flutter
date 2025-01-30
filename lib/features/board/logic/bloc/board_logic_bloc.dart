@@ -3,8 +3,8 @@ import 'package:chess/features/board/business/db/initial_board.dart';
 import 'package:chess/features/board/business/entity/piece_entity.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/data/repository_impl/is_pinned.dart';
-import 'package:chess/features/board/data/repository_impl/move_validation.dart';
+import 'package:chess/features/board/data/services/is_pinned.dart';
+import 'package:chess/features/board/data/services/move_validation.dart';
 import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
 import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
 import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
@@ -267,7 +267,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     }
     return false;
   }
-
 
   bool _isKingInCheck(PlayerType player,List<BoardCellModel> board1) {
     int kingIndex;

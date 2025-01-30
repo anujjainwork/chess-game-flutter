@@ -1,4 +1,5 @@
 import 'package:chess/common/utils.dart';
+import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
@@ -17,7 +18,8 @@ Widget getBoardFullWidget(
     BoardLogicBloc bloc,
     BoardLogicState state,
     GameStatusBloc gameStatusBloc,
-    MoveHistoryCubit moveHistoryCubit) {
+    MoveHistoryCubit moveHistoryCubit,
+    OneVsOneCubit oneVsOneCubit) {
       final currentPlayer = state.props[0] as PlayerType;
   return Padding(
       padding: const EdgeInsets.all(10),
@@ -54,9 +56,10 @@ Widget getBoardFullWidget(
                     bloc,
                     state,
                     moveHistoryState,
+                    oneVsOneCubit,
                     context);
               }
-              return getBoardGameWidget(bloc.board, bloc, state, moveHistoryState,context);
+              return getBoardGameWidget(bloc.board, bloc, state, moveHistoryState,oneVsOneCubit,context);
             },
           ),
           // getBoardGameWidget(bloc.board, bloc, state, context),
