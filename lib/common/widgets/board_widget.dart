@@ -1,10 +1,10 @@
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
+import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
 import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
 import 'package:chess/common/map_piece_icons.dart';
-import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
+import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
 import 'package:flutter/material.dart';
 
 Widget getBoardGameWidget(

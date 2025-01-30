@@ -1,14 +1,14 @@
 import 'package:chess/common/utils.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
-import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
-import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
-import 'package:chess/features/board/presentation/widget/board_widget.dart';
-import 'package:chess/features/board/presentation/widget/captured_piece_widget.dart';
-import 'package:chess/features/board/presentation/widget/move_history_widget.dart';
-import 'package:chess/features/board/presentation/widget/resign_draw_widget.dart';
-import 'package:chess/features/board/presentation/widget/timer_widget.dart';
+import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
+import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chess/common/widgets/board_widget.dart';
+import 'package:chess/common/widgets/captured_piece_widget.dart';
+import 'package:chess/common/widgets/move_history_widget.dart';
+import 'package:chess/common/widgets/resign_draw_widget.dart';
+import 'package:chess/common/widgets/timer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

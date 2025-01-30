@@ -1,17 +1,17 @@
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/presentation/bloc/board_bloc_builder.dart';
-import 'package:chess/features/board/presentation/bloc/board_logic_bloc.dart';
-import 'package:chess/features/board/presentation/bloc/game_status_bloc.dart';
-import 'package:chess/features/board/presentation/cubit/move_history_cubit.dart';
-import 'package:chess/features/board/presentation/cubit/timer_cubit.dart';
+import 'package:chess/features/board/logic/bloc/board_bloc_builder.dart';
+import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
+import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
+import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
 import 'package:chess/common/colors.dart';
-import 'package:chess/features/board/presentation/widget/confirmation_draw_resign_widget.dart';
-import 'package:chess/features/board/presentation/widget/get_end_game_widget.dart';
+import 'package:chess/common/widgets/confirmation_draw_resign_widget.dart';
+import 'package:chess/common/widgets/get_end_game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BoardGameView extends StatelessWidget {
-  const BoardGameView({super.key});
+class OneVsOneBoardGameView extends StatelessWidget {
+  const OneVsOneBoardGameView({super.key});
 
   @override
   Widget build(BuildContext context) {

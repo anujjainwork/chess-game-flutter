@@ -1,4 +1,4 @@
-import 'package:chess/features/board/presentation/cubit/timer_cubit.dart';
+import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
 import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
 import 'package:flutter/material.dart';
