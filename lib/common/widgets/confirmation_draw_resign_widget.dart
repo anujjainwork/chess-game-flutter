@@ -1,4 +1,5 @@
 import 'package:chess/common/utils.dart';
+import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/logic/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
@@ -6,13 +7,13 @@ import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
 import 'package:flutter/material.dart';
 
 Widget getGameDrawOrResignWidget(BuildContext context, GameStatusBloc gameStatusBloc,
-    GameStatusState gameStatusState, MoveHistoryCubit moveHistoryCubit, bool isDrawCalled) {
+    GameStatusState gameStatusState, MoveHistoryCubit moveHistoryCubit, bool isDrawCalled, OneVsOneCubit oneVsOneCubit) {
   return SizedBox(
     height: getDynamicHeight(context, 90),
     width: getDynamicWidth(context, 100),
     child: Stack(
       children: [
-        boardGameBlocBuilder(gameStatusBloc,moveHistoryCubit),
+        boardGameBlocBuilder(gameStatusBloc,moveHistoryCubit,oneVsOneCubit),
         Align(
             alignment: isDrawCalled
                 ? gameStatusState.player == PlayerType.white
