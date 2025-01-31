@@ -39,14 +39,17 @@ Widget getBoardFullWidget(
                     MainAxisAlignment.spaceEvenly, moveHistoryCubit,currentPlayer),
               ),
               getResignDrawWidgets(
-                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, false),
+                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, false, bloc.gameMode),
             ],
+          ),
+          SizedBox(
+            height: getDynamicHeight(context, 2),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               getCapturedPiecesWidget(bloc.capturedPiecesBlack, context, true),
-              getTimerWidget(false),
+              if(bloc.gameMode == GameMode.oneVsOne)  getTimerWidget(false),
             ],
           ),
           SizedBox(
@@ -86,15 +89,20 @@ Widget getBoardFullWidget(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              getTimerWidget(true),
+              if(bloc.gameMode == GameMode.oneVsOne) getTimerWidget(true),
               getCapturedPiecesWidget(bloc.capturedPiecesWhite, context, false),
             ],
           ),
+          SizedBox(
+            height: getDynamicHeight(context, 2),
+          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment:  bloc.gameMode == GameMode.oneVsOne
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.center,
             children: [
               getResignDrawWidgets(
-                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, true),
+                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, true, bloc.gameMode),
               Opacity(
                 opacity: currentPlayer == PlayerType.white ? 1 : 0.2,
                 child: getMoveHistoryWidgetWhite(context,

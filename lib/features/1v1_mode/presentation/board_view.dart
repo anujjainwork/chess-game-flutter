@@ -23,6 +23,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
         providers: [
           BlocProvider<TimerCubit>(
             create: (context) => TimerCubit(
+              gameMode: GameMode.oneVsOne,
               gameStatusBloc: context.read<GameStatusBloc>(),
             ),
           ),

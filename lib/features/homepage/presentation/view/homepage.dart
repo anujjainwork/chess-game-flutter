@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: EdgeInsets.symmetric(
-                        horizontal: getDynamicWidth(context, 10),
+                        horizontal: getDynamicWidth(context, 20),
                         vertical: getDynamicHeight(context, 2),
                       ),
                     ),
@@ -114,7 +114,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  // Play 1v1 Button
+                  SizedBox(height: getDynamicHeight(context, 5),),
+                  // Play 1vBot Button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: EdgeInsets.symmetric(
-                        horizontal: getDynamicWidth(context, 10),
+                        horizontal: getDynamicWidth(context, 20),
                         vertical: getDynamicHeight(context, 2),
                       ),
                     ),

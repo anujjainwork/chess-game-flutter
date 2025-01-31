@@ -234,11 +234,13 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       // Start the timer for the next player
       timerCubit.startTimer(_currentPlayer);
 
-      if (gameMode == GameMode.oneVsBot && _currentPlayer == PlayerType.black) {
-        Future.delayed(const Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (gameMode == GameMode.oneVsBot &&
+            _currentPlayer == PlayerType.black) {
           chessBot.makeBotMove();
-        });
-      }
+        }
+      });
+
     } else {
       emit(InvalidMoveAttempted('Move not valid', isInCheck, _currentPlayer));
     }
