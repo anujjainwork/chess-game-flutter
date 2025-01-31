@@ -19,6 +19,7 @@ dependencies:
   font_awesome_flutter:
   webview_flutter:
   lottie:
+  model_viewer_plus:
 
 dev_dependencies:
   flutter_test:
@@ -48,3 +49,6 @@ flutter:
     - lib/assets/back-button.svg
     - lib/assets/lottie/win_animation.json
     - lib/assets/lottie/draw.json
+    - lib/assets/3d/chess_board.glb
+    - lib/assets/3d/cb_scaled.glb
+    - lib/assets/Chessmate_logo.png
