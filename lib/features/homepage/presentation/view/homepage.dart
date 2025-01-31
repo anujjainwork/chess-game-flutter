@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: EdgeInsets.symmetric(
-                        horizontal: getDynamicWidth(context, 10),
+                        horizontal: getDynamicWidth(context, 20),
                         vertical: getDynamicHeight(context, 2),
                       ),
                     ),
@@ -108,6 +108,30 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Text(
                       'Play 1v1',
+                      style: TextStyle(
+                        fontSize: getDynamicHeight(context, 2),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: getDynamicHeight(context, 5),),
+                  // Play 1vBot Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getDynamicWidth(context, 20),
+                        vertical: getDynamicHeight(context, 2),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRouteNames.oneVsBotGame);
+                    },
+                    child: Text(
+                      'vs Bot',
                       style: TextStyle(
                         fontSize: getDynamicHeight(context, 2),
                         color: Colors.white,

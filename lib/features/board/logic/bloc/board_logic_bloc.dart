@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:chess/features/1vsBot/bot/chess_bot.dart';
 import 'package:chess/features/board/business/db/initial_board.dart';
 import 'package:chess/features/board/business/entity/piece_entity.dart';
+import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/data/services/is_pinned.dart';
@@ -17,16 +19,24 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   final TimerCubit timerCubit;
   final GameStatusBloc gameStatusBloc;
   final MoveHistoryCubit moveHistoryCubit;
+  final GameMode gameMode;
+  late final ChessBot chessBot;
 
   List<BoardCellModel> _board = [];
   int whiteKingIndex = 60;
   int blackKingIndex = 4;
   PlayerType _currentPlayer = PlayerType.white;
+  bool _isInCheck = false;
   List<PieceEntity> _capturedPiecesWhite = [];
   List<PieceEntity> _capturedPiecesBlack = [];
 
-  BoardLogicBloc({required this.timerCubit, required this.gameStatusBloc, required this.moveHistoryCubit,})
-      : super(BoardLogicInitial()) {
+  BoardLogicBloc({
+    required this.gameMode,
+    required this.timerCubit,
+    required this.gameStatusBloc,
+    required this.moveHistoryCubit,
+  }) : super(BoardLogicInitial()) {
+    chessBot = ChessBot(this);
     on<InitializeBoard>(_onInitializeBoard);
     on<SelectPiece>(_onSelectPiece);
     on<DeselectPiece>(_onDeselectPiece);
@@ -37,6 +47,12 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
   List<PieceEntity> get capturedPiecesBlack => _capturedPiecesBlack;
   List<PieceEntity> get capturedPiecesWhite => _capturedPiecesWhite;
+
+  // bool get isInCheck => isInCheck;
+
+  bool get getIsInCheck => _isInCheck;
+
+  PlayerType get currentPlayer => _currentPlayer;
 
   // @override
   // void onTransition(
@@ -66,7 +82,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
               : false
           : false;
       // Determine if the current state is IsCheckState
-      final isInCheck = (state is IsCheckState || stillCheckAfterInvalidMove);
+      _isInCheck = (state is IsCheckState || stillCheckAfterInvalidMove);
 
       int originalKingIndex = _currentPlayer == PlayerType.white
           ? whiteKingIndex
@@ -78,7 +94,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           .entries
           .where((entry) {
             final toIndex = entry.key;
-            if (isInCheck) {
+            if (_isInCheck) {
               // Validate only moves resolving the check
               return _doesMoveResolveCheck(
                 event.cellIndex,
@@ -90,13 +106,13 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
             } else {
               // Validate moves normally
               return isValidMove(
-                  rank: selectedCell.pieceEntity!.rank,
-                  player: selectedCell.pieceEntity!.player,
-                  fromIndex: event.cellIndex,
-                  toIndex: toIndex,
-                  board: _board,
-                  kingIndex: originalKingIndex) && 
-                  ! isPinned(
+                      rank: selectedCell.pieceEntity!.rank,
+                      player: selectedCell.pieceEntity!.player,
+                      fromIndex: event.cellIndex,
+                      toIndex: toIndex,
+                      board: _board,
+                      kingIndex: originalKingIndex) &&
+                  !isPinned(
                       fromIndex: event.cellIndex,
                       toIndex: toIndex,
                       board: _board,
@@ -113,7 +129,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         board,
       ));
       emit(ValidMovesHighlighted(
-          _currentPlayer, event.cellIndex, validMoves, _board, isInCheck));
+          _currentPlayer, event.cellIndex, validMoves, _board, _isInCheck));
     }
   }
 
@@ -139,7 +155,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
     if (!movingPiece.hasPiece ||
         movingPiece.pieceEntity!.playerType != _currentPlayer) return;
-
     if (targetCell.hasPiece &&
         targetCell.pieceEntity!.playerType == _currentPlayer) return;
 
@@ -165,10 +180,16 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
             toIndex: event.toIndex,
             board: _board,
             kingIndex: originalKingIndex);
-    
+
     final isSelectedPiecePinned = isInCheck
-    ? false
-    : isPinned(fromIndex: event.fromIndex,toIndex: event.toIndex,board: _board,player: _currentPlayer,whiteKingIndex: whiteKingIndex,blackKingIndex: blackKingIndex);
+        ? false
+        : isPinned(
+            fromIndex: event.fromIndex,
+            toIndex: event.toIndex,
+            board: _board,
+            player: _currentPlayer,
+            whiteKingIndex: whiteKingIndex,
+            blackKingIndex: blackKingIndex);
 
     if (isValid && !isSelectedPiecePinned) {
       if (_board[event.toIndex].hasPiece) {
@@ -196,7 +217,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       _updateKingIndex(movingPiece, event.toIndex);
 
       // Check if the move places the opponent in check
-      if (_isKingInCheck(_currentPlayer,_board)) {
+      if (_isKingInCheck(_currentPlayer, _board)) {
         if (_isCheckmate(_currentPlayer)) {
           gameStatusBloc.add(PlayerCheckMated(attackingPlayer: _currentPlayer));
         } else {
@@ -212,8 +233,16 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
       // Start the timer for the next player
       timerCubit.startTimer(_currentPlayer);
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (gameMode == GameMode.oneVsBot &&
+            _currentPlayer == PlayerType.black) {
+          chessBot.makeBotMove();
+        }
+      });
+
     } else {
-      emit(InvalidMoveAttempted('Move not valid', isInCheck,_currentPlayer));
+      emit(InvalidMoveAttempted('Move not valid', isInCheck, _currentPlayer));
     }
   }
 
@@ -252,7 +281,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         _updateKingIndex(_board[toIndex], toIndex);
       }
 
-      final resolvesCheck = !_isKingStillInCheck(playerType,_board);
+      final resolvesCheck = !_isKingStillInCheck(playerType, _board);
 
       // Undo the move
       _board[fromIndex] = backupFrom;
@@ -268,7 +297,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     return false;
   }
 
-  bool _isKingInCheck(PlayerType player,List<BoardCellModel> board1) {
+  bool _isKingInCheck(PlayerType player, List<BoardCellModel> board1) {
     int kingIndex;
     player == PlayerType.white
         ? kingIndex = blackKingIndex
@@ -291,7 +320,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     return false;
   }
 
-  bool _isKingStillInCheck(PlayerType player,List<BoardCellModel>board2) {
+  bool _isKingStillInCheck(PlayerType player, List<BoardCellModel> board2) {
     int kingIndex;
     player == PlayerType.black
         ? kingIndex = blackKingIndex
@@ -343,7 +372,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
       for (int toIndex = 0; toIndex < _board.length; toIndex++) {
         if (_doesMoveResolveCheck(fromIndex, toIndex, defendingPlayerType,
-                cell.pieceEntity!.rank, cell.pieceEntity!.player)) {
+            cell.pieceEntity!.rank, cell.pieceEntity!.player)) {
           return false; // A valid move exists
         }
       }

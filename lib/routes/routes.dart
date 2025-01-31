@@ -1,3 +1,4 @@
+import 'package:chess/features/1vsBot/presentation/board_view.dart';
 import 'package:chess/features/about_dev/presentation/view/about_dev_view.dart';
 import 'package:chess/features/about_dev/presentation/widgets/web_view.dart';
 import 'package:chess/features/1v1_mode/presentation/board_view.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 class AppRouteNames {
   // 1v1 game
   static const oneVsOneGame = 'oneVsOneGame';
+  // 1vsBot game
+  static const oneVsBotGame = 'oneVsBotGame';
   // about the dev
   static const aboutTheDev = 'aboutTheDev';
   //web view
@@ -20,6 +23,11 @@ class AppRouter {
         return _buildFadePageRoute(
           const OneVsOneBoardGameView(),
           name: AppRouteNames.oneVsOneGame,
+        );
+        case AppRouteNames.oneVsBotGame:
+        return _buildFadePageRoute(
+          const OneVsBotBoardGameView(),
+          name: AppRouteNames.oneVsBotGame,
         );
       case AppRouteNames.aboutTheDev:
         return _buildFadePageRoute(

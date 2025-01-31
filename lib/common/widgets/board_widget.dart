@@ -1,4 +1,5 @@
 import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
+import 'package:chess/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
@@ -13,7 +14,8 @@ Widget getBoardGameWidget(
     BoardLogicBloc bloc,
     BoardLogicState state,
     MoveHistoryState moveHistoryState,
-    OneVsOneCubit oneVsOneCubit,
+    OneVsOneCubit? oneVsOneCubit,
+    OneVsBotCubit? oneVsBotCubit,
     BuildContext context) {
   List<BoardCellModel> board = initialBoard;
   int? selectedCellIndex;
@@ -94,10 +96,14 @@ Widget getBoardGameWidget(
                     return GestureDetector(
                       onTap: () {
                         if (selectedCellIndex == null) {
-                          oneVsOneCubit.selectPieceEvent(index, attackingPiecesIndices);
+                          print('1v1 selected');
+                          if(oneVsOneCubit!=null) oneVsOneCubit.selectPieceEvent(index, attackingPiecesIndices);
+                          print('1vbot selected');
+                          if(oneVsBotCubit!=null) oneVsBotCubit.selectPieceEvent(index, attackingPiecesIndices);
                           // bloc.add(SelectPiece(index, attackingPiecesIndices));
                         } else if (selectedCellIndex == index) {
-                          oneVsOneCubit.deselectPieceEvent();
+                          if(oneVsOneCubit!=null) oneVsOneCubit.deselectPieceEvent();
+                          if(oneVsBotCubit!=null) oneVsBotCubit.deselectPieceEvent();
                           // bloc.add(DeselectPiece());
                         } else {
                           bloc.add(MovePiece(selectedCellIndex, index));

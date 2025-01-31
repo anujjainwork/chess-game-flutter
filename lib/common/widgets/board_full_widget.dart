@@ -1,5 +1,7 @@
 import 'package:chess/common/utils.dart';
 import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
+import 'package:chess/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
+import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
@@ -19,14 +21,16 @@ Widget getBoardFullWidget(
     BoardLogicState state,
     GameStatusBloc gameStatusBloc,
     MoveHistoryCubit moveHistoryCubit,
-    OneVsOneCubit oneVsOneCubit) {
+    OneVsOneCubit? oneVsOneCubit,
+    OneVsBotCubit? oneVsBotCubit
+    ) {
       final currentPlayer = state.props[0] as PlayerType;
   return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
+          if(bloc.gameMode == GameMode.oneVsOne)  Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Opacity(
@@ -35,14 +39,17 @@ Widget getBoardFullWidget(
                     MainAxisAlignment.spaceEvenly, moveHistoryCubit,currentPlayer),
               ),
               getResignDrawWidgets(
-                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, false),
+                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, false, bloc.gameMode),
             ],
+          ),
+          SizedBox(
+            height: getDynamicHeight(context, 2),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               getCapturedPiecesWidget(bloc.capturedPiecesBlack, context, true),
-              getTimerWidget(false),
+              if(bloc.gameMode == GameMode.oneVsOne)  getTimerWidget(false),
             ],
           ),
           SizedBox(
@@ -51,15 +58,28 @@ Widget getBoardFullWidget(
           BlocBuilder<MoveHistoryCubit, MoveHistoryState>(
             builder: (context, moveHistoryState) {
               if (moveHistoryState is MoveUndo||moveHistoryState is MoveRedo) {
-                return getBoardGameWidget(
+                if(oneVsOneCubit!=null) {
+                  return getBoardGameWidget(
                     moveHistoryState.props[0] as List<BoardCellModel>,
                     bloc,
                     state,
                     moveHistoryState,
                     oneVsOneCubit,
+                    oneVsBotCubit,
                     context);
+                }
+                if(oneVsBotCubit!=null){
+                  return getBoardGameWidget(
+                    moveHistoryState.props[0] as List<BoardCellModel>,
+                    bloc,
+                    state,
+                    moveHistoryState,
+                    oneVsOneCubit,
+                    oneVsBotCubit,
+                    context);
+                }
               }
-              return getBoardGameWidget(bloc.board, bloc, state, moveHistoryState,oneVsOneCubit,context);
+              return getBoardGameWidget(bloc.board, bloc, state, moveHistoryState,oneVsOneCubit,oneVsBotCubit,context);
             },
           ),
           // getBoardGameWidget(bloc.board, bloc, state, context),
@@ -69,15 +89,20 @@ Widget getBoardFullWidget(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              getTimerWidget(true),
+              if(bloc.gameMode == GameMode.oneVsOne) getTimerWidget(true),
               getCapturedPiecesWidget(bloc.capturedPiecesWhite, context, false),
             ],
           ),
+          SizedBox(
+            height: getDynamicHeight(context, 2),
+          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment:  bloc.gameMode == GameMode.oneVsOne
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.center,
             children: [
               getResignDrawWidgets(
-                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, true),
+                  context, MainAxisAlignment.spaceEvenly, gameStatusBloc, true, bloc.gameMode),
               Opacity(
                 opacity: currentPlayer == PlayerType.white ? 1 : 0.2,
                 child: getMoveHistoryWidgetWhite(context,

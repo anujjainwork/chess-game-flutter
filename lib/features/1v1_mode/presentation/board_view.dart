@@ -1,4 +1,5 @@
 import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
+import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/logic/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
@@ -22,6 +23,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
         providers: [
           BlocProvider<TimerCubit>(
             create: (context) => TimerCubit(
+              gameMode: GameMode.oneVsOne,
               gameStatusBloc: context.read<GameStatusBloc>(),
             ),
           ),
@@ -30,6 +32,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
           ),
           BlocProvider<BoardLogicBloc>(
             create: (context) => BoardLogicBloc(
+              gameMode: GameMode.oneVsOne,
               timerCubit: context.read<TimerCubit>(),
               gameStatusBloc: context.read<GameStatusBloc>(),
               moveHistoryCubit: context.read<MoveHistoryCubit>(),
@@ -52,7 +55,8 @@ class OneVsOneBoardGameView extends StatelessWidget {
                         return boardGameBlocBuilder(
                             context.read<GameStatusBloc>(),
                             context.read<MoveHistoryCubit>(),
-                            context.read<OneVsOneCubit>());
+                            context.read<OneVsOneCubit>(),
+                            null);
 
                       case const (WhiteWonState):
                         return getEndGameWidget(context, 'White Won', false);
@@ -71,13 +75,15 @@ class OneVsOneBoardGameView extends StatelessWidget {
                             gameState,
                             context.read<MoveHistoryCubit>(),
                             true,
-                            context.read<OneVsOneCubit>());
+                            context.read<OneVsOneCubit>(),
+                            null);
 
                       case const (DrawDeniedState):
                         return boardGameBlocBuilder(
                             context.read<GameStatusBloc>(),
                             context.read<MoveHistoryCubit>(),
-                            context.read<OneVsOneCubit>());
+                            context.read<OneVsOneCubit>(),
+                            null);
 
                       case const (ResignInitiatedState):
                         return getGameDrawOrResignWidget(
@@ -86,7 +92,8 @@ class OneVsOneBoardGameView extends StatelessWidget {
                             gameState,
                             context.read<MoveHistoryCubit>(),
                             false,
-                            context.read<OneVsOneCubit>());
+                            context.read<OneVsOneCubit>(),
+                            null);
 
                       case const (ResignConfirmedState):
                         return getEndGameWidget(
@@ -100,7 +107,8 @@ class OneVsOneBoardGameView extends StatelessWidget {
                         return boardGameBlocBuilder(
                             context.read<GameStatusBloc>(),
                             context.read<MoveHistoryCubit>(),
-                            context.read<OneVsOneCubit>());
+                            context.read<OneVsOneCubit>(),
+                            null);
 
                       case const (PlayerIsCheckMated):
                         return getEndGameWidget(
