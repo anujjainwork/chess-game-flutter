@@ -5,6 +5,7 @@ import 'package:chess/features/board/logic/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
 import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
 import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chess/features/board/logic/cubit/sfx_cubit.dart';
 import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
 import 'package:chess/common/colors.dart';
 import 'package:chess/common/widgets/confirmation_draw_resign_widget.dart';
@@ -18,7 +19,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GameStatusBloc>(
-      create: (_) => GameStatusBloc(),
+      create: (_) => GameStatusBloc(context.read<SfxHapticsCubit>()),
       child: MultiBlocProvider(
         providers: [
           BlocProvider<TimerCubit>(
@@ -33,6 +34,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
           BlocProvider<BoardLogicBloc>(
             create: (context) => BoardLogicBloc(
               gameMode: GameMode.oneVsOne,
+              sfxCubit: context.read<SfxHapticsCubit>(),
               timerCubit: context.read<TimerCubit>(),
               gameStatusBloc: context.read<GameStatusBloc>(),
               moveHistoryCubit: context.read<MoveHistoryCubit>(),

@@ -19,6 +19,7 @@ Widget getBoardGameWidget(
     BuildContext context) {
   List<BoardCellModel> board = initialBoard;
   int? selectedCellIndex;
+  int ? kingInCheckIndex;
   List<int>? validMoves;
   List<int>? attackingPiecesIndices;
 
@@ -34,6 +35,7 @@ Widget getBoardGameWidget(
     board = state.board;
     selectedCellIndex = state.selectedCellIndex;
   } else if (state is IsCheckState) {
+    kingInCheckIndex = state.kingIndex;
     board = state.board;
   }
 
@@ -92,13 +94,12 @@ Widget getBoardGameWidget(
 
                     final isSelected = selectedCellIndex == index;
                     final isValidMove = validMoves?.contains(index) ?? false;
+                    final isKingInCheck = kingInCheckIndex == index;
 
                     return GestureDetector(
                       onTap: () {
                         if (selectedCellIndex == null) {
-                          print('1v1 selected');
                           if(oneVsOneCubit!=null) oneVsOneCubit.selectPieceEvent(index, attackingPiecesIndices);
-                          print('1vbot selected');
                           if(oneVsBotCubit!=null) oneVsBotCubit.selectPieceEvent(index, attackingPiecesIndices);
                           // bloc.add(SelectPiece(index, attackingPiecesIndices));
                         } else if (selectedCellIndex == index) {
@@ -113,10 +114,12 @@ Widget getBoardGameWidget(
                         width: cellSize,
                         height: cellSize,
                         decoration: BoxDecoration(
-                          color: isSelected
+                          color: isKingInCheck
+                          ? Colors.red[100]!.withOpacity(0.9)
+                          : isSelected
                               ? Colors.blueAccent
                               : isValidMove
-                                  ? Colors.green[100]
+                                  ? Colors.green[100]!.withOpacity(0.6)
                                   : (isWhite
                                       ? AppColors.lightCellColor
                                       : AppColors.blackCellColor),

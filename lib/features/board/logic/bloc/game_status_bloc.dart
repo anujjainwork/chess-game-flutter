@@ -1,12 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
+import 'package:chess/features/board/logic/cubit/sfx_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'game_status_event.dart';
 part 'game_status_state.dart';
 
 class GameStatusBloc extends Bloc<GameStatusEvent, GameStatusState> {
-  GameStatusBloc() : super(const GameStarted()) {
+  final SfxHapticsCubit sfxCubit;
+  GameStatusBloc(this.sfxCubit) : super(const GameStarted()) {
     on<WhiteTimeIsOut>(_handleWhiteTimeOut);
     on<BlackTimeIsOut>(_handleBlackTimeOut);
     on<InitiateDraw>(_handleInitiateDraw);

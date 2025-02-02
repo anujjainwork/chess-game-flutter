@@ -1,5 +1,6 @@
 import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
+import 'package:chess/features/homepage/presentation/widgets/glowing_button.dart';
 import 'package:chess/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
@@ -25,7 +26,9 @@ class _HomePageState extends State<HomePage> {
                 gradient: AppColors.appHomePageGradient,
               ),
             ),
-            Center(child: Opacity(opacity: 0.5,
+            Align(
+              alignment: Alignment.topCenter,
+              child: Opacity(opacity: 0.5,
             child: Container(
               width: getDynamicWidth(context, 70),
               child: Image.asset('lib/assets/Chessmate_logo.png'),
@@ -35,8 +38,8 @@ class _HomePageState extends State<HomePage> {
             // 3D Model - Enlarged Chessboard
             Align(
               alignment: Alignment.topCenter,
-              child: SizedBox(
-                height: getDynamicHeight(context, 40), // Increased size
+              child: Container(
+                height: getDynamicHeight(context, 100), // Increased size
                 width: getDynamicWidth(context, 95), // Adjusted width
                 child: const ModelViewer(
                   src: 'lib/assets/3d/chess_board.glb',
@@ -69,25 +72,24 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: getDynamicHeight(context, 2)),
 
                     // Game Mode Buttons
-                    _buildGlowingButton(
+                    getGlowingButton(
                       context,
-                      label: '1 vs 1',
+                      label: 'Pass & Play',
                       routeName: AppRouteNames.oneVsOneGame,
                     ),
                     SizedBox(height: getDynamicHeight(context, 3)),
 
-                    _buildGlowingButton(
+                    getGlowingButton(
                       context,
-                      label: '1 vs Bot',
+                      label: 'Play a Bot',
                       routeName: AppRouteNames.oneVsBotGame,
                     ),
                     SizedBox(height: getDynamicHeight(context, 3)),
 
-                    _buildGlowingButton(
+                    getGlowingButton(
                       context,
-                      label: 'Know about the developer',
+                      label: 'Know the Dev',
                       routeName: AppRouteNames.aboutTheDev,
-                      isSmall: true,
                     ),
                   ],
                 ),
@@ -95,47 +97,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Helper method to create glowing buttons with GestureDetector
-  Widget _buildGlowingButton(
-    BuildContext context, {
-    required String label,
-    required String routeName,
-    bool isSmall = false,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, routeName);
-      },
-      child: Container(
-        height: getDynamicHeight(context, 5),
-        width: getDynamicWidth(context, 80),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.8), // Glow effect
-              spreadRadius: 2,
-              blurRadius: 10,
-            ),
-          ],
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: getDynamicWidth(context, 5),
-          // vertical: getDynamicHeight(context, 1.5),
-        ),
-        child: Center(child: Text(
-          label,
-          style: TextStyle(
-            fontSize: getDynamicHeight(context, isSmall ? 2 : 2.5),
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),)
       ),
     );
   }
