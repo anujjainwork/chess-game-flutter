@@ -51,8 +51,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   List<PieceEntity> get capturedPiecesBlack => _capturedPiecesBlack;
   List<PieceEntity> get capturedPiecesWhite => _capturedPiecesWhite;
 
-  // bool get isInCheck => isInCheck;
-
   bool get getIsInCheck => _isInCheck;
 
   PlayerType get currentPlayer => _currentPlayer;
@@ -86,7 +84,6 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           : false;
       // Determine if the current state is IsCheckState
       _isInCheck = (state is IsCheckState || stillCheckAfterInvalidMove);
-
       int originalKingIndex = _currentPlayer == PlayerType.white
           ? whiteKingIndex
           : blackKingIndex; // Store the original king index
@@ -141,7 +138,10 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       final validMovesState = state as ValidMovesHighlighted;
 
       if (validMovesState.isInCheck) {
-        emit(IsCheckState(_currentPlayer, _board));
+        int currentKingIndex = _currentPlayer == PlayerType.white
+                                ? whiteKingIndex
+                                : blackKingIndex;
+        emit(IsCheckState(_currentPlayer, _board, whiteKingIndex));
       } else {
         emit(BoardLoaded(_board, _currentPlayer, _capturedPiecesWhite,
             _capturedPiecesBlack));
@@ -227,7 +227,10 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         } else {
           _currentPlayer = _switchPlayer(_currentPlayer);
           sfxCubit.playCheckSound();
-          emit(IsCheckState(_currentPlayer, _board));
+          int currentKingIndex = _currentPlayer == PlayerType.white
+                                ? whiteKingIndex
+                                : blackKingIndex;
+          emit(IsCheckState(_currentPlayer, _board, currentKingIndex));
         }
       } else {
         _currentPlayer = _switchPlayer(_currentPlayer);
