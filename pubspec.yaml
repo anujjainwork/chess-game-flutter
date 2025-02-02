@@ -25,6 +25,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: "^0.14.3"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/Chessmate_logo.png"
+  min_sdk_android: 21
 
 flutter:
   uses-material-design: true
@@ -50,5 +57,4 @@ flutter:
     - lib/assets/lottie/win_animation.json
     - lib/assets/lottie/draw.json
     - lib/assets/3d/chess_board.glb
-    - lib/assets/3d/cb_scaled.glb
     - lib/assets/Chessmate_logo.png
