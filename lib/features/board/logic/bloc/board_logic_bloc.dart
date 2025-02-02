@@ -9,6 +9,7 @@ import 'package:chess/features/board/data/services/is_pinned.dart';
 import 'package:chess/features/board/data/services/move_validation.dart';
 import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
 import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chess/features/board/logic/cubit/sfx_cubit.dart';
 import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
 import 'package:equatable/equatable.dart';
 
@@ -16,6 +17,7 @@ part 'board_logic_event.dart';
 part 'board_logic_state.dart';
 
 class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
+  final SfxHapticsCubit sfxCubit;
   final TimerCubit timerCubit;
   final GameStatusBloc gameStatusBloc;
   final MoveHistoryCubit moveHistoryCubit;
@@ -31,6 +33,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   List<PieceEntity> _capturedPiecesBlack = [];
 
   BoardLogicBloc({
+    required this.sfxCubit,
     required this.gameMode,
     required this.timerCubit,
     required this.gameStatusBloc,
@@ -193,6 +196,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
 
     if (isValid && !isSelectedPiecePinned) {
       if (_board[event.toIndex].hasPiece) {
+        sfxCubit.playCaptureSound();
         _currentPlayer == PlayerType.white
             ? _capturedPiecesWhite.add(_board[event.toIndex].pieceEntity!)
             : _capturedPiecesBlack.add(_board[event.toIndex].pieceEntity!);
@@ -222,10 +226,12 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
           gameStatusBloc.add(PlayerCheckMated(attackingPlayer: _currentPlayer));
         } else {
           _currentPlayer = _switchPlayer(_currentPlayer);
+          sfxCubit.playCheckSound();
           emit(IsCheckState(_currentPlayer, _board));
         }
       } else {
         _currentPlayer = _switchPlayer(_currentPlayer);
+        sfxCubit.playMoveSound();
         emit(PieceMoved(event.fromIndex, event.toIndex));
         emit(BoardLoaded(_board, _currentPlayer, _capturedPiecesWhite,
             _capturedPiecesBlack));

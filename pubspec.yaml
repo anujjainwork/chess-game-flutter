@@ -20,6 +20,7 @@ dependencies:
   webview_flutter:
   lottie:
   model_viewer_plus:
+  flame_audio:
 
 dev_dependencies:
   flutter_test:
@@ -58,3 +59,6 @@ flutter:
     - lib/assets/lottie/draw.json
     - lib/assets/3d/chess_board.glb
     - lib/assets/Chessmate_logo.png
+    - lib/assets/sfx/capture.mp3
+    - lib/assets/sfx/check.mp3
+    - lib/assets/sfx/move.mp3
