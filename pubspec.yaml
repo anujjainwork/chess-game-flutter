@@ -21,6 +21,7 @@ dependencies:
   lottie:
   model_viewer_plus:
   flame_audio:
+  shimmer:
 
 dev_dependencies:
   flutter_test:
@@ -63,3 +64,7 @@ flutter:
     - lib/assets/sfx/check.mp3
     - lib/assets/sfx/move.mp3
     - lib/assets/bot_icon.svg
+
+  
+  shaders:
+    - shaders/simple.frag

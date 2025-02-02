@@ -1,6 +1,8 @@
 import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
+import 'package:chess/features/homepage/presentation/widgets/button_shimmer.dart';
 import 'package:chess/features/homepage/presentation/widgets/glowing_button.dart';
+import 'package:chess/features/homepage/presentation/widgets/shader_1.dart';
 import 'package:chess/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
@@ -21,19 +23,21 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.center,
           children: [
             // Background gradient
-            Container(
-              decoration: const BoxDecoration(
-                gradient: AppColors.appHomePageGradient,
-              ),
-            ),
+            // Container(
+            //   decoration: const BoxDecoration(
+            //     gradient: AppColors.appHomePageGradient,
+            //   ),
+            // ),
+            const SimpleShaderExample(),
             Align(
-              alignment: Alignment.topCenter,
-              child: Opacity(opacity: 0.5,
-            child: Container(
-              width: getDynamicWidth(context, 70),
-              child: Image.asset('lib/assets/Chessmate_logo.png'),
-            ),)
-            ),
+                alignment: Alignment.topCenter,
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Container(
+                    width: getDynamicWidth(context, 70),
+                    child: Image.asset('lib/assets/Chessmate_logo.png'),
+                  ),
+                )),
 
             // 3D Model - Enlarged Chessboard
             Align(
@@ -86,11 +90,27 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: getDynamicHeight(context, 3)),
 
-                    getGlowingButton(
-                      context,
-                      label: 'Know the Dev',
-                      routeName: AppRouteNames.aboutTheDev,
-                    ),
+                    ShimmerButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRouteNames.aboutTheDev);
+                      },
+                      shimmerColorFrom:
+                          const Color.fromARGB(255, 255, 255, 255), // Orange
+                      shimmerColorTo:
+                          const Color.fromARGB(255, 255, 255, 255), // Purple
+                      background: Colors.black,
+                      borderRadius: 12,
+                      shimmerDuration: const Duration(seconds: 3),
+                      borderWidth: 1.5,
+                      child: Text(
+                        'Know the dev',
+                        style: TextStyle(
+                          fontSize: getDynamicHeight(context, 2.5),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

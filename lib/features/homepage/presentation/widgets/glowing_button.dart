@@ -1,3 +1,4 @@
+import 'package:chess/common/colors.dart';
 import 'package:chess/common/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -13,17 +14,10 @@ Widget getGlowingButton(
       },
       child: Container(
         height: getDynamicHeight(context, 5),
-        width: getDynamicWidth(context, 80),
+        width: getDynamicWidth(context, 60),
         decoration: BoxDecoration(
-          color: Colors.black,
+          gradient: AppColors.timerWidgetGradient,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.4), // Glow effect
-              spreadRadius: 1,
-              blurRadius: 10,
-            ),
-          ],
         ),
         padding: EdgeInsets.symmetric(
           horizontal: getDynamicWidth(context, 5),
