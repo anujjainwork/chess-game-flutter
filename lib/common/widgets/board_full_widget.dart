@@ -1,6 +1,7 @@
 import 'package:chess/common/utils.dart';
 import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
 import 'package:chess/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
+import 'package:chess/features/1vsBot/presentation/bot_widget.dart';
 import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
@@ -45,11 +46,18 @@ Widget getBoardFullWidget(
           SizedBox(
             height: getDynamicHeight(context, 2),
           ),
-          Row(
+          if(bloc.gameMode == GameMode.oneVsOne) Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               getCapturedPiecesWidget(bloc.capturedPiecesBlack, context, true),
-              if(bloc.gameMode == GameMode.oneVsOne)  getTimerWidget(false),
+              getTimerWidget(false),
+            ],
+          ),
+          if(bloc.gameMode == GameMode.oneVsBot) Column(
+            children: [
+              getBotWidget(context),
+              SizedBox(height: getDynamicHeight(context, 5),),
+              getCapturedPiecesWidget(bloc.capturedPiecesBlack, context, true)
             ],
           ),
           SizedBox(

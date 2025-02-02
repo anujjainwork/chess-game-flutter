@@ -62,3 +62,4 @@ flutter:
     - lib/assets/sfx/capture.mp3
     - lib/assets/sfx/check.mp3
     - lib/assets/sfx/move.mp3
+    - lib/assets/bot_icon.svg
