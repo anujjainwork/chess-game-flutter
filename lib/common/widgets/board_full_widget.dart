@@ -27,8 +27,9 @@ Widget getBoardFullWidget(
     ) {
       final currentPlayer = state.props[0] as PlayerType;
   return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if(bloc.gameMode == GameMode.oneVsOne)  Row(
