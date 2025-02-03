@@ -22,7 +22,7 @@ class _AboutDevState extends State<AboutDev> {
 
   Future<void> _preloadImages() async {
     await precacheImage(
-      const AssetImage('lib/assets/anuj.jpg'),
+      const AssetImage('lib/assets/anuj.png'),
       context,
     );
   }
