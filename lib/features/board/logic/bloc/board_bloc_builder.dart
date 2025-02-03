@@ -7,7 +7,12 @@ import 'package:chess/common/widgets/board_full_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-BlocBuilder boardGameBlocBuilder(GameStatusBloc gameStatusBloc,MoveHistoryCubit moveHistoryCubit,OneVsOneCubit? oneVsOneCubit, OneVsBotCubit? oneVsBotCubit) {
+BlocBuilder boardGameBlocBuilder(
+    GameStatusBloc gameStatusBloc,
+    MoveHistoryCubit moveHistoryCubit,
+    OneVsOneCubit? oneVsOneCubit,
+    OneVsBotCubit? oneVsBotCubit,
+    ) {
   return BlocBuilder<BoardLogicBloc, BoardLogicState>(
     builder: (context, boardState) {
       final bloc = context.read<BoardLogicBloc>();

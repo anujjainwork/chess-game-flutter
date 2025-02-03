@@ -1,4 +1,5 @@
 import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
+import 'package:chess/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
 import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
 import 'package:chess/features/board/logic/bloc/board_bloc_builder.dart';
@@ -33,6 +34,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
           ),
           BlocProvider<BoardLogicBloc>(
             create: (context) => BoardLogicBloc(
+              botDialoguesCubit: context.read<BotDialoguesCubit>(),
               gameMode: GameMode.oneVsOne,
               sfxCubit: context.read<SfxHapticsCubit>(),
               timerCubit: context.read<TimerCubit>(),

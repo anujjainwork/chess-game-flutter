@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:chess/features/1vsBot/bot/chess_bot.dart';
+import 'package:chess/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
 import 'package:chess/features/board/business/db/initial_board.dart';
 import 'package:chess/features/board/business/entity/piece_entity.dart';
 import 'package:chess/features/board/business/enums/game_modes_enum.dart';
@@ -12,6 +13,7 @@ import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
 import 'package:chess/features/board/logic/cubit/sfx_cubit.dart';
 import 'package:chess/features/board/logic/cubit/timer_cubit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path/path.dart';
 
 part 'board_logic_event.dart';
 part 'board_logic_state.dart';
@@ -23,6 +25,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   final MoveHistoryCubit moveHistoryCubit;
   final GameMode gameMode;
   late final ChessBot chessBot;
+  final BotDialoguesCubit botDialoguesCubit;
 
   List<BoardCellModel> _board = [];
   int whiteKingIndex = 60;
@@ -33,6 +36,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   List<PieceEntity> _capturedPiecesBlack = [];
 
   BoardLogicBloc({
+    required this.botDialoguesCubit,
     required this.sfxCubit,
     required this.gameMode,
     required this.timerCubit,
@@ -68,6 +72,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     _board = generateInitialBoard();
     emit(BoardLoaded(
         _board, _currentPlayer, _capturedPiecesWhite, _capturedPiecesBlack));
+    botDialoguesCubit.botGreets();
     timerCubit
         .startTimer(_currentPlayer); // Start the timer for the initial player
   }
@@ -141,7 +146,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         int currentKingIndex = _currentPlayer == PlayerType.white
                                 ? whiteKingIndex
                                 : blackKingIndex;
-        emit(IsCheckState(_currentPlayer, _board, whiteKingIndex));
+        emit(IsCheckState(_currentPlayer, _board, currentKingIndex));
       } else {
         emit(BoardLoaded(_board, _currentPlayer, _capturedPiecesWhite,
             _capturedPiecesBlack));
@@ -197,9 +202,13 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     if (isValid && !isSelectedPiecePinned) {
       if (_board[event.toIndex].hasPiece) {
         sfxCubit.playCaptureSound();
-        _currentPlayer == PlayerType.white
-            ? _capturedPiecesWhite.add(_board[event.toIndex].pieceEntity!)
-            : _capturedPiecesBlack.add(_board[event.toIndex].pieceEntity!);
+        if (_currentPlayer == PlayerType.white) {
+          botDialoguesCubit.botAppreciates();
+          _capturedPiecesWhite.add(_board[event.toIndex].pieceEntity!);
+        } else {
+          botDialoguesCubit.botTeases();
+          _capturedPiecesBlack.add(_board[event.toIndex].pieceEntity!);
+        }
       }
 
       // Perform the move
@@ -231,6 +240,9 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
                                 ? whiteKingIndex
                                 : blackKingIndex;
           emit(IsCheckState(_currentPlayer, _board, currentKingIndex));
+          currentPlayer == PlayerType.white
+            ? botDialoguesCubit.botGaveCheck()
+            : botDialoguesCubit.botGotCheck();
         }
       } else {
         _currentPlayer = _switchPlayer(_currentPlayer);
