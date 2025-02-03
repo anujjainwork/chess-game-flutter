@@ -26,7 +26,13 @@ Widget getBoardFullWidget(
     OneVsBotCubit? oneVsBotCubit
     ) {
       final currentPlayer = state.props[0] as PlayerType;
-  return Padding(
+  return GestureDetector(
+    onTap: () {
+      if(state is PieceSelected){
+        bloc.add(DeselectPiece());
+      }
+    },
+    child: Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -120,5 +126,5 @@ Widget getBoardFullWidget(
             ],
           ),
         ],
-      ));
+      )),);
 }
