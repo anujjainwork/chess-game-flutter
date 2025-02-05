@@ -61,7 +61,6 @@
 
 - **Flutter** – Cross-platform mobile framework.  
 - **Bloc (State Management)** – Manages the game logic efficiently.  
-- **Hive (Local Storage)** – Stores game state and history.  
 - **Custom Chess Engine** – Minimax with Alpha-Beta pruning for bot AI.  
 
 ---
