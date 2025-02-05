@@ -2,6 +2,8 @@ import 'package:chess/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
 import 'package:chess/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
 import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
+import 'package:chess/features/board/business/repository/board_repository.dart';
+import 'package:chess/features/board/data/repository/board_repository_impl.dart';
 import 'package:chess/features/board/logic/bloc/board_bloc_builder.dart';
 import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
 import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
@@ -19,6 +21,7 @@ class OneVsBotBoardGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BoardRepository boardRepository = BoardRepositoryImpl();
     return BlocProvider<GameStatusBloc>(
       create: (_) => GameStatusBloc(context.read<SfxHapticsCubit>()),
       child: MultiBlocProvider(
@@ -40,6 +43,7 @@ class OneVsBotBoardGameView extends StatelessWidget {
               timerCubit: context.read<TimerCubit>(),
               gameStatusBloc: context.read<GameStatusBloc>(),
               moveHistoryCubit: context.read<MoveHistoryCubit>(),
+              boardRepository: boardRepository
             )..add(InitializeBoard()),
           ),
           BlocProvider<OneVsBotCubit>(

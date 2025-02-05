@@ -5,6 +5,7 @@ import 'package:chess/features/board/business/db/initial_board.dart';
 import 'package:chess/features/board/business/entity/piece_entity.dart';
 import 'package:chess/features/board/business/enums/game_modes_enum.dart';
 import 'package:chess/features/board/business/enums/player_type_enum.dart';
+import 'package:chess/features/board/business/repository/board_repository.dart';
 import 'package:chess/features/board/data/model/cell_model.dart';
 import 'package:chess/features/board/data/services/is_pinned.dart';
 import 'package:chess/features/board/data/services/move_validation.dart';
@@ -26,6 +27,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
   final GameMode gameMode;
   late final ChessBot chessBot;
   final BotDialoguesCubit botDialoguesCubit;
+  final BoardRepository boardRepository;
 
   List<BoardCellModel> _board = [];
   int whiteKingIndex = 60;
@@ -42,6 +44,7 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     required this.timerCubit,
     required this.gameStatusBloc,
     required this.moveHistoryCubit,
+    required this.boardRepository
   }) : super(BoardLogicInitial()) {
     chessBot = ChessBot(this);
     on<InitializeBoard>(_onInitializeBoard);
@@ -101,12 +104,15 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
             final toIndex = entry.key;
             if (_isInCheck) {
               // Validate only moves resolving the check
-              return _doesMoveResolveCheck(
+              return boardRepository.doesMoveResolveCheck(
                 event.cellIndex,
                 toIndex,
                 _currentPlayer,
                 selectedCell.pieceEntity!.rank,
                 selectedCell.pieceEntity!.player,
+                _board,
+                whiteKingIndex,
+                blackKingIndex
               );
             } else {
               // Validate moves normally
@@ -174,13 +180,15 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
         _currentPlayer == PlayerType.white ? whiteKingIndex : blackKingIndex;
 
     final isValid = isInCheck
-        ? _doesMoveResolveCheck(
+        ? boardRepository.doesMoveResolveCheck(
             event.fromIndex,
             event.toIndex,
             _currentPlayer,
             movingPiece.pieceEntity!.rank,
             movingPiece.pieceEntity!.player,
-          )
+            _board,
+            whiteKingIndex,
+            blackKingIndex)
         : isValidMove(
             rank: movingPiece.pieceEntity!.rank,
             player: movingPiece.pieceEntity!.player,
@@ -267,56 +275,56 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
     }
   }
 
-  bool _doesMoveResolveCheck(int fromIndex, int toIndex, PlayerType playerType,
-      String rank, String player) {
-    final backupFrom = _board[fromIndex];
-    final backupTo = _board[toIndex];
-    int? originalKingIndex;
+  // bool _doesMoveResolveCheck(int fromIndex, int toIndex, PlayerType playerType,
+  //     String rank, String player) {
+  //   final backupFrom = _board[fromIndex];
+  //   final backupTo = _board[toIndex];
+  //   int? originalKingIndex;
 
-    originalKingIndex =
-        playerType == PlayerType.white ? whiteKingIndex : blackKingIndex;
+  //   originalKingIndex =
+  //       playerType == PlayerType.white ? whiteKingIndex : blackKingIndex;
 
-    if (isValidMove(
-        rank: rank,
-        player: player,
-        fromIndex: fromIndex,
-        toIndex: toIndex,
-        board: _board,
-        kingIndex: originalKingIndex)) {
-      // Simulate the move
-      _board[toIndex] = BoardCellModel(
-        cellPosition: toIndex,
-        hasPiece: true,
-        pieceEntity: backupFrom.pieceEntity,
-      );
-      _board[fromIndex] = BoardCellModel(
-        cellPosition: fromIndex,
-        hasPiece: false,
-        pieceEntity: null,
-      );
+  //   if (isValidMove(
+  //       rank: rank,
+  //       player: player,
+  //       fromIndex: fromIndex,
+  //       toIndex: toIndex,
+  //       board: _board,
+  //       kingIndex: originalKingIndex)) {
+  //     // Simulate the move
+  //     _board[toIndex] = BoardCellModel(
+  //       cellPosition: toIndex,
+  //       hasPiece: true,
+  //       pieceEntity: backupFrom.pieceEntity,
+  //     );
+  //     _board[fromIndex] = BoardCellModel(
+  //       cellPosition: fromIndex,
+  //       hasPiece: false,
+  //       pieceEntity: null,
+  //     );
 
-      // Check if the moved piece is the king
-      if (rank == 'king') {
-        originalKingIndex =
-            playerType == PlayerType.white ? whiteKingIndex : blackKingIndex;
-        _updateKingIndex(_board[toIndex], toIndex);
-      }
+  //     // Check if the moved piece is the king
+  //     if (rank == 'king') {
+  //       originalKingIndex =
+  //           playerType == PlayerType.white ? whiteKingIndex : blackKingIndex;
+  //       _updateKingIndex(_board[toIndex], toIndex);
+  //     }
 
-      final resolvesCheck = !_isKingStillInCheck(playerType, _board);
+  //     final resolvesCheck = !_isKingStillInCheck(playerType, _board);
 
-      // Undo the move
-      _board[fromIndex] = backupFrom;
-      _board[toIndex] = backupTo;
+  //     // Undo the move
+  //     _board[fromIndex] = backupFrom;
+  //     _board[toIndex] = backupTo;
 
-      // Restore the king's original index if it was moved
-      if (originalKingIndex != null) {
-        _updateKingIndex(_board[originalKingIndex], originalKingIndex);
-      }
+  //     // Restore the king's original index if it was moved
+  //     if (originalKingIndex != null) {
+  //       _updateKingIndex(_board[originalKingIndex], originalKingIndex);
+  //     }
 
-      return resolvesCheck;
-    }
-    return false;
-  }
+  //     return resolvesCheck;
+  //   }
+  //   return false;
+  // }
 
   bool _isKingInCheck(PlayerType player, List<BoardCellModel> board1) {
     int kingIndex;
@@ -392,8 +400,15 @@ class BoardLogicBloc extends Bloc<BoardLogicEvent, BoardLogicState> {
       final fromIndex = cell.cellPosition;
 
       for (int toIndex = 0; toIndex < _board.length; toIndex++) {
-        if (_doesMoveResolveCheck(fromIndex, toIndex, defendingPlayerType,
-            cell.pieceEntity!.rank, cell.pieceEntity!.player)) {
+        if (boardRepository.doesMoveResolveCheck(
+            fromIndex,
+            toIndex,
+            defendingPlayerType,
+            cell.pieceEntity!.rank,
+            cell.pieceEntity!.player,
+            _board,
+            whiteKingIndex,
+            blackKingIndex)) {
           return false; // A valid move exists
         }
       }
