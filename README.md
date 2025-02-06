@@ -32,7 +32,7 @@
 
 ---
 
-## Chess Logic
+## Bloc Logic
 
 > *Understanding the architecture of ChessMate*  
 
