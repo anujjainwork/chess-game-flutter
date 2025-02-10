@@ -21,7 +21,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BoardRepository boardRepository = BoardRepositoryImpl();
+    // final BoardRepository boardRepository = BoardRepositoryImpl();
     return BlocProvider<GameStatusBloc>(
       create: (_) => GameStatusBloc(context.read<SfxHapticsCubit>()),
       child: MultiBlocProvider(
@@ -43,7 +43,7 @@ class OneVsOneBoardGameView extends StatelessWidget {
               timerCubit: context.read<TimerCubit>(),
               gameStatusBloc: context.read<GameStatusBloc>(),
               moveHistoryCubit: context.read<MoveHistoryCubit>(),
-              boardRepository: boardRepository
+              // boardRepository: boardRepository
             )..add(InitializeBoard()),
           ),
           BlocProvider<OneVsOneCubit>(
