@@ -111,3 +111,7 @@ local.properties
 test-results/
 coverage/
 output/
+
+
+#key.properties
+key.properties

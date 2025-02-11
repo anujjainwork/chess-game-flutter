@@ -1,5 +1,5 @@
-import 'package:chess/features/board/business/entity/cell_entity.dart';
-import 'package:chess/features/board/business/entity/piece_entity.dart';
+import 'package:chessmate/features/board/business/entity/cell_entity.dart';
+import 'package:chessmate/features/board/business/entity/piece_entity.dart';
 
 class BoardCellModel extends BoardCellEntity {
   BoardCellModel({

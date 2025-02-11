@@ -1,4 +1,4 @@
-import 'package:chess/features/board/business/entity/piece_entity.dart';
+import 'package:chessmate/features/board/business/entity/piece_entity.dart';
 
 class BoardCellEntity {
   int cellPosition;

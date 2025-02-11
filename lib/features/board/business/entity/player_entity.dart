@@ -1,4 +1,4 @@
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
 
 class PlayerEntity{
   PlayerType playerType;

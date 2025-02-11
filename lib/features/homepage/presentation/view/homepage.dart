@@ -1,9 +1,9 @@
-import 'package:chess/common/colors.dart';
-import 'package:chess/common/utils.dart';
-import 'package:chess/features/homepage/presentation/widgets/button_shimmer.dart';
-import 'package:chess/features/homepage/presentation/widgets/glowing_button.dart';
-import 'package:chess/common/widgets/shader_1.dart';
-import 'package:chess/routes/routes.dart';
+import 'package:chessmate/common/colors.dart';
+import 'package:chessmate/common/utils.dart';
+import 'package:chessmate/features/homepage/presentation/widgets/button_shimmer.dart';
+import 'package:chessmate/features/homepage/presentation/widgets/glowing_button.dart';
+import 'package:chessmate/common/widgets/shader_1.dart';
+import 'package:chessmate/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 

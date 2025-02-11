@@ -1,7 +1,7 @@
-import 'package:chess/features/board/business/entity/piece_entity.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/data/services/move_validation.dart';
+import 'package:chessmate/features/board/business/entity/piece_entity.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/data/services/move_validation.dart';
 
 bool isPinned(
     {required int fromIndex,

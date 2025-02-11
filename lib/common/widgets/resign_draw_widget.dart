@@ -1,7 +1,7 @@
-import 'package:chess/common/utils.dart';
-import 'package:chess/features/board/business/enums/game_modes_enum.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
+import 'package:chessmate/common/utils.dart';
+import 'package:chessmate/features/board/business/enums/game_modes_enum.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/logic/bloc/game_status_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

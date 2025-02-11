@@ -1,4 +1,4 @@
-import 'package:chess/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
 
 bool isValidMove({
   required String rank,

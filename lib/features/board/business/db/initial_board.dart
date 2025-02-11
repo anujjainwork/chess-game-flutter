@@ -1,5 +1,5 @@
-import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/data/model/piece_model.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/data/model/piece_model.dart';
 
 List<BoardCellModel> generateInitialBoard() {
   List<String> initialSetup = [

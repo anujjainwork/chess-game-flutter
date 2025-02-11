@@ -1,5 +1,5 @@
-import 'package:chess/features/board/business/db/initial_board.dart';
-import 'package:chess/features/board/business/entity/cell_entity.dart';
+import 'package:chessmate/features/board/business/db/initial_board.dart';
+import 'package:chessmate/features/board/business/entity/cell_entity.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

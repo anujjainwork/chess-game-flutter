@@ -1,7 +1,7 @@
-import 'package:chess/features/board/business/entity/piece_entity.dart';
-import 'package:chess/common/colors.dart';
-import 'package:chess/common/utils.dart';
-import 'package:chess/common/map_piece_icons.dart';
+import 'package:chessmate/features/board/business/entity/piece_entity.dart';
+import 'package:chessmate/common/colors.dart';
+import 'package:chessmate/common/utils.dart';
+import 'package:chessmate/common/map_piece_icons.dart';
 import 'package:flutter/material.dart';
 
 Widget getCapturedPiecesWidget(
@@ -66,7 +66,7 @@ Widget getCapturedPiecesWidget(
                   SizedBox(
                     width: iconSize,
                     height: iconSize,
-                    child: getPieceIcon(entry.key),
+                    child: getPieceIcon(entry.key,context),
                   ),
                   if (entry.value > 1)
                     Positioned(

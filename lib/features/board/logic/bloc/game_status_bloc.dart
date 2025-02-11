@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/logic/cubit/sfx_cubit.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/logic/cubit/sfx_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'game_status_event.dart';

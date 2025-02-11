@@ -1,8 +1,8 @@
-import 'package:chess/features/1vsBot/presentation/board_view.dart';
-import 'package:chess/features/about_dev/presentation/view/about_dev_view.dart';
-import 'package:chess/features/about_dev/presentation/widgets/web_view.dart';
-import 'package:chess/features/1v1_mode/presentation/board_view.dart';
-import 'package:chess/routes/routing_fade_animation.dart';
+import 'package:chessmate/features/1vsBot/presentation/board_view.dart';
+import 'package:chessmate/features/about_dev/presentation/view/about_dev_view.dart';
+import 'package:chessmate/features/about_dev/presentation/widgets/web_view.dart';
+import 'package:chessmate/features/1v1_mode/presentation/board_view.dart';
+import 'package:chessmate/routes/routing_fade_animation.dart';
 import 'package:flutter/material.dart';
 
 class AppRouteNames {

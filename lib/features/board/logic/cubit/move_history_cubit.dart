@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:chess/features/board/business/db/initial_board.dart';
-import 'package:chess/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/business/db/initial_board.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
 import 'package:equatable/equatable.dart';
 
 part 'move_history_state.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:chess/features/board/business/enums/game_modes_enum.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/data/model/player_model.dart';
-import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
+import 'package:chessmate/features/board/business/enums/game_modes_enum.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/data/model/player_model.dart';
+import 'package:chessmate/features/board/logic/bloc/game_status_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'timer_state.dart';

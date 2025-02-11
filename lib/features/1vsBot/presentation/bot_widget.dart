@@ -1,6 +1,6 @@
-import 'package:chess/common/colors.dart';
-import 'package:chess/common/utils.dart';
-import 'package:chess/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
+import 'package:chessmate/common/colors.dart';
+import 'package:chessmate/common/utils.dart';
+import 'package:chessmate/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';

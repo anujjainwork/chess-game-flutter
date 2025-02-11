@@ -1,5 +1,5 @@
-import 'package:chess/common/colors.dart';
-import 'package:chess/common/utils.dart';
+import 'package:chessmate/common/colors.dart';
+import 'package:chessmate/common/utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 

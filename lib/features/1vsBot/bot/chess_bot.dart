@@ -1,10 +1,10 @@
 import 'dart:math';
-import 'package:chess/features/board/business/entity/piece_entity.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/data/services/is_pinned.dart';
-import 'package:chess/features/board/data/services/move_validation.dart';
-import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
+import 'package:chessmate/features/board/business/entity/piece_entity.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/data/services/is_pinned.dart';
+import 'package:chessmate/features/board/data/services/move_validation.dart';
+import 'package:chessmate/features/board/logic/bloc/board_logic_bloc.dart';
 import 'package:collection/collection.dart';
 
 class ChessBot {

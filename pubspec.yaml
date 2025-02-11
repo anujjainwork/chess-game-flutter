@@ -1,7 +1,7 @@
-name: chess
-description: "A new Flutter project."
+name: chessmate
+description: "Chess game"
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0+4
 
 environment:
   sdk: '>=3.3.3 <4.0.0'

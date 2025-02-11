@@ -1,7 +1,7 @@
-import 'package:chess/common/colors.dart';
-import 'package:chess/common/utils.dart';
-import 'package:chess/common/widgets/shader_1.dart';
-import 'package:chess/features/about_dev/presentation/widgets/social_link_widget.dart';
+import 'package:chessmate/common/colors.dart';
+import 'package:chessmate/common/utils.dart';
+import 'package:chessmate/common/widgets/shader_1.dart';
+import 'package:chessmate/features/about_dev/presentation/widgets/social_link_widget.dart';
 import 'package:flutter/material.dart';
 
 class AboutDev extends StatefulWidget {

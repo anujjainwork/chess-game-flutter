@@ -1,7 +1,7 @@
-import 'package:chess/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
-import 'package:chess/features/board/logic/cubit/sfx_cubit.dart';
-import 'package:chess/features/homepage/presentation/view/homepage.dart';
-import 'package:chess/routes/routes.dart';
+import 'package:chessmate/features/1vsBot/bot/logic/bot_dialogues_cubit.dart';
+import 'package:chessmate/features/board/logic/cubit/sfx_cubit.dart';
+import 'package:chessmate/features/homepage/presentation/view/homepage.dart';
+import 'package:chessmate/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

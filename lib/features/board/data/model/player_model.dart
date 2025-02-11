@@ -1,5 +1,5 @@
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/business/entity/player_entity.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/business/entity/player_entity.dart';
 
 class PlayerModel extends PlayerEntity {
   PlayerModel({

@@ -1,5 +1,5 @@
-import 'package:chess/features/board/business/entity/piece_entity.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/business/entity/piece_entity.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
 
 class PieceModel extends PieceEntity {
   PieceModel(super.playerType, {required super.rank, required super.player});

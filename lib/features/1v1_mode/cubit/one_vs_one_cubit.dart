@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
+import 'package:chessmate/features/board/logic/bloc/board_logic_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'one_vs_one_state.dart';

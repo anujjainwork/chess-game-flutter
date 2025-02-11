@@ -1,12 +1,12 @@
-import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
-import 'package:chess/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/data/model/cell_model.dart';
-import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
-import 'package:chess/common/colors.dart';
-import 'package:chess/common/utils.dart';
-import 'package:chess/common/map_piece_icons.dart';
-import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chessmate/features/1v1_mode/cubit/one_vs_one_cubit.dart';
+import 'package:chessmate/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/logic/bloc/board_logic_bloc.dart';
+import 'package:chessmate/common/colors.dart';
+import 'package:chessmate/common/utils.dart';
+import 'package:chessmate/common/map_piece_icons.dart';
+import 'package:chessmate/features/board/logic/cubit/move_history_cubit.dart';
 import 'package:flutter/material.dart';
 
 Widget getBoardGameWidget(
@@ -132,7 +132,7 @@ Widget getBoardGameWidget(
                                     : 3.14159,
                                 child: Center(
                                   child: getPieceIcon(
-                                      board[index].pieceEntity!.pieceId),
+                                      board[index].pieceEntity!.pieceId,context),
                                 ),
                               )
                             : null,

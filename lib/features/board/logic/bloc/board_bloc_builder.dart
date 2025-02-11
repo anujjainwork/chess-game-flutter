@@ -1,9 +1,9 @@
-import 'package:chess/features/1v1_mode/cubit/one_vs_one_cubit.dart';
-import 'package:chess/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
-import 'package:chess/features/board/logic/bloc/board_logic_bloc.dart';
-import 'package:chess/features/board/logic/bloc/game_status_bloc.dart';
-import 'package:chess/features/board/logic/cubit/move_history_cubit.dart';
-import 'package:chess/common/widgets/board_full_widget.dart';
+import 'package:chessmate/features/1v1_mode/cubit/one_vs_one_cubit.dart';
+import 'package:chessmate/features/1vsBot/bot/logic/one_vs_bot_cubit.dart';
+import 'package:chessmate/features/board/logic/bloc/board_logic_bloc.dart';
+import 'package:chessmate/features/board/logic/bloc/game_status_bloc.dart';
+import 'package:chessmate/features/board/logic/cubit/move_history_cubit.dart';
+import 'package:chessmate/common/widgets/board_full_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

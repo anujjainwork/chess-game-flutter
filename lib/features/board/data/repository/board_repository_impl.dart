@@ -1,6 +1,6 @@
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/business/repository/board_repository.dart';
-import 'package:chess/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/business/repository/board_repository.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
 
 class BoardRepositoryImpl implements BoardRepository{
   

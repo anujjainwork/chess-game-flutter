@@ -1,5 +1,5 @@
-import 'package:chess/features/board/business/enums/player_type_enum.dart';
-import 'package:chess/features/board/data/model/cell_model.dart';
+import 'package:chessmate/features/board/business/enums/player_type_enum.dart';
+import 'package:chessmate/features/board/data/model/cell_model.dart';
 
 abstract class BoardRepository {
   bool isPinned({required int fromIndex, required int toIndex, required List<BoardCellModel> board, required PlayerType player,
