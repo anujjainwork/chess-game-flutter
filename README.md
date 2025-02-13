@@ -1,17 +1,13 @@
-<p align="center">
-  <table>
-    <tr>
-      <td>
-        <img src="lib/assets/Chessmate_logo.png" alt="ChessMate Logo" width="150" height="150"/>
-      </td>
-      <td>
-        <h1><b>ChessMate - Ultimate Chess Experience</b></h1>
-      </td>
-    </tr>
-  </table>
-</p>
-
-
+<table>
+  <tr>
+    <td>
+      <img src="lib/assets/Chessmate_logo.png" alt="ChessMate Logo" width="100"/>
+    </td>
+    <td>
+      <h1><b>ChessMate - Ultimate Chess Experience</b></h1>
+    </td>
+  </tr>
+</table>
 
 ## Download ChessMate 📥
 
