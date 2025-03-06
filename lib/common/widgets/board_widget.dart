@@ -110,33 +110,43 @@ Widget getBoardGameWidget(
                           bloc.add(MovePiece(selectedCellIndex, index));
                         }
                       },
-                      child: Container(
-                        width: cellSize,
-                        height: cellSize,
-                        decoration: BoxDecoration(
-                          color: isKingInCheck
-                          ? Colors.red[100]!.withOpacity(0.9)
-                          : isSelected
-                              ? Colors.blueAccent
-                              : isValidMove
-                                  ? Colors.green[100]!.withOpacity(0.6)
-                                  : (isWhite
-                                      ? AppColors.lightCellColor
-                                      : AppColors.blackCellColor),
-                        ),
-                        child: board[index].hasPiece
-                            ? Transform.rotate(
-                                angle: board[index].pieceEntity!.playerType ==
-                                        PlayerType.white
-                                    ? 0
-                                    : 3.14159,
-                                child: Center(
-                                  child: getPieceIcon(
-                                      board[index].pieceEntity!.pieceId,context),
-                                ),
-                              )
-                            : null,
-                      ),
+                      child: Stack(
+  alignment: Alignment.center,
+  children: [
+    Container(
+      width: cellSize,
+      height: cellSize,
+      decoration: BoxDecoration(
+        color: isKingInCheck
+            ? Colors.red[100]!.withOpacity(0.9)
+            : isSelected
+                ? Colors.blueAccent
+                : isValidMove
+                    ? Colors.green[100]!.withOpacity(0.6)
+                    : (isWhite ? AppColors.lightCellColor : AppColors.blackCellColor),
+      ),
+    ),
+    if (board[index].hasPiece)
+      Transform.rotate(
+        angle: board[index].pieceEntity!.playerType == PlayerType.white ? 0 : 3.14159,
+        child: Center(
+          child: getPieceIcon(board[index].pieceEntity!.pieceId, context),
+        ),
+      ),
+    if (isValidMove)
+      Container(
+        width: cellSize * 0.3,
+        height: cellSize * 0.3,
+        decoration: BoxDecoration(
+          color: (board[index].hasPiece)
+          ? AppColors.lightCellColor.withOpacity(0.1)
+          :AppColors.lightCellColor,
+          shape: BoxShape.circle,
+        ),
+      ),
+  ],
+),
+
                     );
                   },
                 ),
