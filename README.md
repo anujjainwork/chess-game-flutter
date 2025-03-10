@@ -9,11 +9,9 @@
   </tr>
 </table>
 
-## Download ChessMate 📥
+## Download ChessMate from Google Playstore 📥
 
-[![Download ChessMate APK](https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android)](https://drive.google.com/drive/folders/1sDOocnIulF35eNpXY-zw2fYT9M34DTWQ)
-
-> 📢 *Coming Soon on Play Store! (Currently under review)*
+[![Download ChessMate APK](https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android)]([https://drive.google.com/drive/folders/1sDOocnIulF35eNpXY-zw2fYT9M34DTWQ](https://play.google.com/store/apps/details?id=com.jainanuj.chessmate&pcampaignid=web_share))
 
 ---
 
