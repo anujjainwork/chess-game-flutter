@@ -22,11 +22,14 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def keystoreProperties = new Properties()
-   def keystorePropertiesFile = rootProject.file('key.properties')
-   if (keystorePropertiesFile.exists()) {
-       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   }
+ext.keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+println "Looking for key.properties at: ${keystorePropertiesFile.absolutePath}"
+if (keystorePropertiesFile.exists()) {
+    ext.keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    println "key.properties file not found!"
+}
 
 android {
     namespace "com.jainanuj.chessmate"
