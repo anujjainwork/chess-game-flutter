@@ -1,7 +1,7 @@
 name: chessmate
 description: "Chess game"
 publish_to: 'none'
-version: 2.0.0+0
+version: 2.0.2+202
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
